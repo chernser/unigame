@@ -1,0 +1,22 @@
+<h3>{{title}}</h3>
+
+<div class="column">
+    <div class="columns eleven">
+
+        <img class="debug-bordered" src="images/locations/mock_location.png" alt="">
+    </div>
+
+    <div class="columns four">
+        <div id="character_stats"></div>
+        <div id="navigation">
+            <ul>
+                {{#paths}}
+                <li><a href="#loc/{{action}}">{{title}}</a></li>
+                {{/paths}}
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="column" id="chat">
+
+</div>

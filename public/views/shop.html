@@ -1,0 +1,27 @@
+<div class="column">
+    <h2>{{title}}</h2>
+    <div class="columns eleven">
+        <ul>
+            {{#items}}
+            <li>
+                <h5>{{title}}</h5>
+                <p>{{desc}}</p>
+                <i>Need</i>
+                {{#req}}
+                    <b>{{title}}:{{value}}</b>
+                {{/req}}
+                
+            </li>            
+            {{/items}}
+        </ul>
+        
+    </div>
+
+    <div class="columns four">
+        <ul>
+            {{#categories}}
+            <li><a href="#loc/shop/{{../shopId}}/{{key}}">{{title}}</a></li>
+            {{/categories}}
+        </ul>
+    </div>
+</div>

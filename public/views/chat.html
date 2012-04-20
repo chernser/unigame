@@ -1,0 +1,18 @@
+<div class="columns eleven four-lines">
+    {{#each messages}}
+        {{this}}
+    {{/each}}
+</div>
+<div class="columns four">
+    <ul>
+        {{#each room}}
+        <li>{{this.name}}</li>
+        {{/each}}
+    </ul>
+</div>
+<div class="container">
+    <div class="columns eleven">
+        <input id="sendBtn" type="button" value="send">
+        <input id="chatMessage" type="text">
+    </div>
+</div>

@@ -1,0 +1,59 @@
+
+.debug-bordered {
+    border: solid 1px red;
+
+}
+
+
+.centered {
+    text-align: center;
+}
+
+
+.list-of-values { 
+    display: inline-block;
+
+}
+
+.list-of-values li {
+    text-align: right;
+    font: 13px 'Arial';
+}
+
+
+.hor-list-of-buttons li {
+    display: inline;
+    margin: 3px;
+    padding: 0px;
+}
+
+input[type="button"].small-button  {
+    font: 14px 'Curier' 700;
+    padding: 5px;
+}
+
+
+.two-lines                     { height: 100px; }
+.three-lines                   { height: 160px; }
+.four-lines                    { height: 220px; }
+
+@media (max-height: 768px) {
+    .two-lines                     { height: 80px; }
+    .three-lines                   { height: 120px; }
+    .four-lines                    { height: 160px; }
+}
+
+
+
+#health {
+    color: #f00;
+}
+
+#manna {
+    color: #00f;
+}
+
+#chatMessage {
+    display: inline-block;
+    width: 89%;
+}
