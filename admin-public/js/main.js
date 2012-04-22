@@ -12,6 +12,9 @@ var UniGameAdmin = {};
 require(
 [
     'order!lib/jquery.1.7.1',
+    'order!lib/jquery.noty',
+    'order!lib/jquery.jqGrid.min',
+    'order!lib/fileuploader',
     'order!lib/underscore',
     'order!lib/handlebars',
     'order!lib/backbone',

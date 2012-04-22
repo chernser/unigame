@@ -1,65 +1,37 @@
 <div class="span12">
     <div class="row">
-        <p><h1>UniGame Administration Dashboard</h1><i>divide et impera</i></p>
+
+        <p>
+        <h1>UniGame Administration Dashboard</h1><i>divide et impera</i></p>
         <!-- Navigation -->
-        <ul class="nav nav-pills">
+
+        <ul class="nav nav-pills">    
+        {{#each navigation}}
+            {{#if subs}}
+            <li class="dropdown">
+                <a class="dropdown-toggle"
+                   data-toggle="dropdown"
+                   href="#">{{name}}
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    {{#each subs}}
+                    <li><a href="{{link}}">{{name}}</a></li>
+                    {{/each}}
+                </ul>
+            </li>
+            {{else}}
+
             <li class="active">
-
+                <a href="{{link}}">{{name}}</a>
             </li>
 
-            <li class="dropdown">
-                <a class="dropdown-toggle"
-                   data-toggle="dropdown"
-                   href="#">
-                    Servers
-                    <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="#server_statistics">Statistics</a></li>
-                </ul>
-            </li>
-
-            <li class="dropdown">
-                <a class="dropdown-toggle"
-                   data-toggle="dropdown"
-                   href="#">
-                    Users
-                    <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="#server_statistics">Moderate</a></li>
-                    <li><a href="#server_statistics">Items</a></li>
-                </ul>
-            </li>
-
-            <li class="dropdown active">
-                <a class="dropdown-toggle"
-                   data-toggle="dropdown"
-                   href="#">
-                    Items
-                    <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Items Collection</a></li>
-                    <li><a href="#">Shop Management</a></li>
-                </ul>
-            </li>
-
-            <li class="dropdown">
-                <a class="dropdown-toggle"
-                   data-toggle="dropdown"
-                   href="#">
-                    Game
-                    <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="#server_statistics">Quests</a></li>
-                    <li><a href="#server_statistics">Events</a></li>
-                </ul>
-            </li>
+            {{/if}}
+        {{/each}}
         </ul>
-    </div>
     <div class="container" id="_mgmt_panel">
 
     </div>
-</div>    
+
+
+</div>

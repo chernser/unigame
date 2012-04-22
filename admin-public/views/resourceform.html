@@ -1,0 +1,41 @@
+    <form class="form-horizontal">
+        <fieldset>
+            <legend>Item "Battle Axe" (id: 123)</legend>
+            {{#each fields}}
+            <div class="control-group">
+                <label class="control-label" for="input01">{{name}}</label>
+                <div class="controls">
+                    {{#if string}}
+                    <input type="text" class="input-xlarge" id="input01">
+                    <!-- <p class="help-block">Supporting help text</p> -->
+                    {{/if}}
+
+                    {{#if enum}}
+                    <select>
+                        {{#each consts}}
+                        <option>{{this}}</option>
+                        {{/each}}
+                    </select>
+                    {{/if}}
+
+                    {{#if image}}
+                    <img class="img-placeholder" alt="">
+                    <div id="file-uploader">
+                        <noscript>
+                            <p>Please enable JavaScript to use file uploader.</p>
+                        </noscript>
+                    </div>
+                    {{/if}}
+
+                </div>
+            </div>
+            {{/each}}
+        </fieldset>
+
+        <div class="btn-group">
+            <button class="btn">Update</button>
+            <button class="btn">Copy</button>
+            <button class="btn">Delete</button>
+        </div>
+
+    </form>

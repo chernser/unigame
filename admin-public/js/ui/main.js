@@ -1,7 +1,11 @@
 require(
     [
         'order!ui/common.view',
+        'order!ui/resourcedef.model',
+        'order!ui/resourceform.view',
         'order!ui/dashboard.view',
+        'order!ui/dashboard.model',
+        'order!ui/itemscollection.view',
         'order!ui/main.router'
     ],
     function () {

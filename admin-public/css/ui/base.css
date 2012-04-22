@@ -45,15 +45,9 @@ input[type="button"].small-button  {
 
 
 
-#health {
-    color: #f00;
-}
-
-#manna {
-    color: #00f;
-}
-
-#chatMessage {
-    display: inline-block;
-    width: 89%;
+.img-placeholder {
+    display: inline;
+    background-image: url('http://placehold.it/100x100');
+    width: 100px;
+    height: 100px;
 }

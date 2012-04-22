@@ -46,7 +46,9 @@ Here is major character parameters
 1. name 			- latin name (max 250 chars)
 2. image_id 		- id of image
 3. durability		- how long item can live 
-4. type 			- type of item (head_wear, arms_wear, sholders_wear, body_wear, legs_wear, fingers_wear, foots_wear, resources, gift, food, artifact, prize, amunition, one_handed_weapon, 						  two_handed_weapon, custom)
+4. type 			- type of item (head_wear, arms_wear, sholders_wear, body_wear, legs_wear, fingers_wear, foots_wear,
+                                    resources, gift, food, artifact, prize, amunition, one_handed_weapon,
+                                    two_handed_weapon, custom)
 
 ========== Shop ===============
 1. owner_id 		- id of character or some constant to mark shop as NPC owned 
