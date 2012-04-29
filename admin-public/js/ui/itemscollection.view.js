@@ -50,7 +50,7 @@ var ItemsCollectionView = Backbone.View.extend(_.extend(CommonView, {
                 success: function(model, response) {
                     debug("Item definition model was fetched");
                     UniGameAdmin.app.addRegions({ resource_form: "#resource_form"});
-                    var itemFieldsOrder = ['image'];
+                    var itemFieldsOrder = ['name', 'image'];
                     var item = {id: 12223};
                     var view = new ResourceFormView({model: model, fieldsOrder: itemFieldsOrder, resource: item});
                     UniGameAdmin.app.resource_form.show(view);

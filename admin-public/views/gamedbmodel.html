@@ -1,0 +1,38 @@
+<div class="span12">
+
+
+    <select id="model">
+        {{#each models}}
+            {{#if selected}}
+        <option selected="selected" value="{{name}}">{{name}}</option>
+            {{else}}
+        <option value="{{name}}">{{name}}</option>
+            {{/if}}
+        {{/each}}
+    </select>
+
+    <form class="form-horizontal">
+        <legend style="text-transform: capitalize">{{selectedModel.name}} Metamodel</legend>
+        <fieldset>
+            <div id="modelFields">
+
+
+            </div>
+
+            <div class="row">
+                <div class="span3">
+                    <button id="addfieldbtn" type="button" class="btn">Add Field</button>
+                </div>
+            </div>
+        </fieldset>
+
+
+    </form>
+
+
+    <div class="btn-group">
+        <button id="saveBtn" class="btn">Save</button>
+        <button id="resetBtn" class="btn">Reset</button>
+    </div>
+
+</div>

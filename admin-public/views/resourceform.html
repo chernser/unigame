@@ -3,15 +3,19 @@
             <legend>Item "Battle Axe" (id: 123)</legend>
             {{#each fields}}
             <div class="control-group">
-                <label class="control-label" for="input01">{{name}}</label>
+                <label class="control-label">{{name}}</label>
                 <div class="controls">
                     {{#if string}}
-                    <input type="text" class="input-xlarge" id="input01">
+                    <input name="{{name}}" type="text" class="input-xlarge">
                     <!-- <p class="help-block">Supporting help text</p> -->
                     {{/if}}
 
+                    {{#if integer}}
+                    <input name="{{name}}" type="text" class="input-xlarge">
+                    {{/if}}
+
                     {{#if enum}}
-                    <select>
+                    <select name="{{name}}">
                         {{#each consts}}
                         <option>{{this}}</option>
                         {{/each}}
@@ -19,7 +23,7 @@
                     {{/if}}
 
                     {{#if image}}
-                    <img class="img-placeholder" alt="">
+                    <a href="#"><img class="img-placeholder" alt=""></a>
                     <div id="file-uploader">
                         <noscript>
                             <p>Please enable JavaScript to use file uploader.</p>

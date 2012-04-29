@@ -51,3 +51,12 @@ input[type="button"].small-button  {
     width: 100px;
     height: 100px;
 }
+
+fieldset > div {
+    margin-top: 20px;
+    padding-left: 20px;
+}
+
+#modelFields > div {
+    margin-top: 20px;
+}

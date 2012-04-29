@@ -1,0 +1,39 @@
+<div class="row db-model-field">
+    <div class="span3">
+        <label>Field Name</label>
+        {{#if isNew}}
+        <input name="fldName" type="text" value="{{name}}">
+        {{else}}
+        <input disabled="disabled" name="fldName" type="text" value="{{name}}">
+        {{/if}}
+    </div>
+    <div class="span3">
+        <label>Type</label>
+        {{#if mandatory}}
+        <input class="field-type-select" disabled="disabled" name="fldName" type="text" value="{{type}}">
+        {{else}}
+        <select class="field-type-select">
+            <option>string</option>
+            <option>integer</option>
+            <option>float</option>
+            <option>image</option>
+            <option>enum</option>
+        </select>
+        {{/if}}
+    </div>
+
+    <div style="display: none;" args="args" class="span3">
+        <label></label>
+        <input name="args" type="text" class="span3">
+    </div>
+
+    {{#if mandatory}}
+
+    {{else}}
+    <div class="span1">
+        <label>&nbsp;</label>
+        <button type="button" class="btn btn-danger">Remove</button>
+    </div>
+    {{/if}}
+
+</div>

@@ -29,27 +29,28 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
 
                 if (attrKey == 'id') continue;
                 var attribute = this.model.attributes[attrKey];
+                var attrKeyOrder = fieldsOrder.indexOf(attrKey);
 
                 var field = new Object();
                 field['name'] = attrKey;
                 field[attribute.type] = true;
                 field['consts'] = attribute.consts;
                 field['url'] = attribute.url;
-                field['order'] = fieldsOrder.indexOf(attrKey);
+                field['order'] = attrKeyOrder == -1 ? 65535 : attrKeyOrder;
 
                 formFields.push(field);
             }
 
             formFields.sort(function (a, b) {
+                debug("Compare  " + a.name + " (" + a.order + ") ?= " + b.name + " (" + b.order + ")");
                 if (a.order == b.order) {
-
                     if (a.name > b.name)
                         return 1;
                     if (a.name < b.name)
                         return -1
                     return 0
                 } else {
-                    return b.order - a.order;
+                    return a.order - b.order;
                 }
             });
 
