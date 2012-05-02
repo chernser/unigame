@@ -152,57 +152,37 @@ expressApp.get('/admin/dashboard/:id', function (req, res) {
 });
 
 
-/* Items */
-var ItemDef = {
-    name:{
-        type:"string",
-        mandatory: true
-    },
+var engineApi = require('../common/api.js');
 
-    type:{
-        type:"enum",
-        consts:["head_wear", "arms_wear", "sholders_wear", "body_wear", "legs_wear", "fingers_wear", "foots_wear",
-            "resource", "gift", "food", "artifact", "prize", "amunition", "one_handed_weapon",
-            "two_handed_weapon", "custom"],
-        mandatory: true
-    },
-
-    typeArgs:{
-        type:"string",
-        mandatory: true
-    },
-
-    image:{
-        type:"image",
-        url:"/admin/images/",
-        mandatory: true
-    },
-
-    durability: {
-        type: "integer",
-        mandatory: true
-    }
-
-};
-
-expressApp.get('/api/item', function (req, res) {
-    res.send(ItemDef);
-});
-
-expressApp.put('/api/item', function (req, res) {
-    //console.log(req.body);
-
-    for (attrKey in req.body) {
+function updateDef(source, target) {
+    for (attrKey in target) {
         if (attrKey == 'id')  { continue; }
 
-        if (_.isUndefined(ItemDef[attrKey])) {
-            ItemDef[attrKey] = req.body[attrKey];
-            ItemDef[attrKey].mandatory = true;
+        if (!_.isUndefined(source[attrKey])) {
+            target[attrKey] = source[attrKey];
         }
     }
 
-    res.send(ItemDef);
+    return target;
+}
 
+expressApp.get('/api/item', function (req, res) {
+    res.send(engineApi.ItemDef);
+});
+
+expressApp.put('/api/item', function (req, res) {
+    engineApi.ItemDef = updateDef(engineApi.ItemDef, req.body);
+    res.send(engineApi.ItemDef);
+});
+
+
+
+expressApp.get('/api/user', function(req, res){
+    res.send(engineApi.UserDef);
+});
+
+expressApp.get('/api/character', function(req, res){
+    res.send(engineApi.CharacterDef);
 });
 
 var items =

@@ -9,7 +9,6 @@ var CommonView = _.extend({
     },
 
     render: function() {
-        debug("common view render function")
         var that = this;
         var deferedObj = $.Deferred();
         $.when(Backbone.Marionette.TemplateCache.get(this.templateName)).done(function (tmpl) {

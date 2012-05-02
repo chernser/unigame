@@ -14,6 +14,10 @@
                     <input name="{{name}}" type="text" class="input-xlarge">
                     {{/if}}
 
+                    {{#if float}}
+                    <input name="{{name}}" type="text" class="input-xlarge">
+                    {{/if}}
+
                     {{#if enum}}
                     <select name="{{name}}">
                         {{#each consts}}

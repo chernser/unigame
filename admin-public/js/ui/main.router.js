@@ -61,7 +61,4 @@ var MainRouter = Backbone.Router.extend({
         var mgmtView = new GameDbModeView({models: models});
         this.initDashboard(mgmtView);
     }
-
-
-
 });
