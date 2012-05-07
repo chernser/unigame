@@ -45,7 +45,7 @@ var ItemsCollectionView = Backbone.View.extend(_.extend(CommonView, {
             $("#items_collection_tbl").jqGrid(options);
 
 
-            new ResourceDefModel({id:'item'}).fetch({
+            new ResourceDefModel({id:'Item'}).fetch({
 
                 success: function(model, response) {
                     debug("Item definition model was fetched");

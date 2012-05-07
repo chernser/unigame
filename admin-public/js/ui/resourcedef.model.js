@@ -2,7 +2,7 @@
 
 var ResourceDefModel = Backbone.Model.extend({
 
-    urlRoot: '/api/'
+    urlRoot: '/api/def/'
 
 
 });

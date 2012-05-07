@@ -11,6 +11,8 @@ var events = require('events');
 var _ = require('underscore');
 var express = require('express');
 var mongoDb = require('mongodb');
+var engineApi = require('../common/api.js');
+
 
 // Application
 var application = new events.EventEmitter();
@@ -73,6 +75,8 @@ application.db = new mongoDb.Db(config.db.name,
     new mongoDb.Server('localhost', 27017, {}), {});
 
 application.db.open(function () {
+    engineApi.initDb(application.db);
+
     application.db.collection('sequences', function (err, collection) {
         collection.insert({_id:'userSeqNumber', value:1});
 
@@ -152,37 +156,30 @@ expressApp.get('/admin/dashboard/:id', function (req, res) {
 });
 
 
-var engineApi = require('../common/api.js');
-
-function updateDef(source, target) {
-    for (attrKey in target) {
-        if (attrKey == 'id')  { continue; }
-
-        if (!_.isUndefined(source[attrKey])) {
-            target[attrKey] = source[attrKey];
+/* Defs */
+function getModelDefinition(defId, res) {
+    engineApi.getDef(application.db, defId, function(err, def){
+        if (err != null) {
+            res.send(500);
+            return;
         }
-    }
 
-    return target;
+        if (def == null) {
+            res.send(404);
+        } else {
+            delete def['_id'];
+            res.send(def);
+        }
+    });
 }
 
-expressApp.get('/api/item', function (req, res) {
-    res.send(engineApi.ItemDef);
+expressApp.get('/api/def/:defId', function (req, res) {
+    getModelDefinition(req.params.defId, res);
 });
 
-expressApp.put('/api/item', function (req, res) {
-    engineApi.ItemDef = updateDef(engineApi.ItemDef, req.body);
-    res.send(engineApi.ItemDef);
-});
-
-
-
-expressApp.get('/api/user', function(req, res){
-    res.send(engineApi.UserDef);
-});
-
-expressApp.get('/api/character', function(req, res){
-    res.send(engineApi.CharacterDef);
+expressApp.put('/api/def/:defId', function (req, res) {
+    engineApi.updateDef(application.db, req.params.defId, req.body);
+    getModelDefinition(req.params.defId, res);
 });
 
 var items =
