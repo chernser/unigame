@@ -54,7 +54,6 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
                 }
             });
 
-            debug(formFields);
             return {fields:formFields};
         },
 
@@ -62,12 +61,26 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
             $(this.el).ready(function () {
                 var file_uploader_div = $("#file-uploader")[0];
                 if (!_.isUndefined(file_uploader_div)) {
-                    var uploader = new qq.FileUploader({
-                        element:file_uploader_div,
-                        action:'/admin/',
-                        onSubmit: function(id, filename) {
+                    var form = "<form id='file_upload_form' action='/admin/items/images/' method='post' enctype='multipart/form-data'>" +
+                        "<input name='file' type='file'>" +
+                        "<button>Upload</button>" +
+                        "</form>";
+                    $(form).appendTo(file_uploader_div);
 
-                        }
+                    var upload_form = $(file_uploader_div).find("#file_upload_form");
+                    var fieldName = $(file_uploader_div).attr('fieldname');
+                    upload_form.submit(function () {
+
+                        upload_form.ajaxSubmit({
+                            success: function (responseText, statusText, xhr, $form) {
+
+                                if (!_.isUndefined(responseText.file)) {
+                                    $("#" + fieldName + '_img')[0].src = responseText.file;
+                                }
+                            }
+                        });
+
+                        return false;
                     });
                 }
 

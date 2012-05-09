@@ -27,8 +27,10 @@
                     {{/if}}
 
                     {{#if image}}
-                    <a href="#"><img class="img-placeholder" alt=""></a>
-                    <div id="file-uploader">
+                    <a href="#"><img id='{{name}}_img' class="img-placeholder" alt=""></a>
+
+                    <div id="file-uploader" fieldname='{{name}}'>
+                        <form action="resourceform.html"></form>
                         <noscript>
                             <p>Please enable JavaScript to use file uploader.</p>
                         </noscript>

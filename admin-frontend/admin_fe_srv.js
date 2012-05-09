@@ -11,8 +11,9 @@ var events = require('events');
 var _ = require('underscore');
 var express = require('express');
 var mongoDb = require('mongodb');
+var fs = require('fs');
+var pathUtils = require('path');
 var engineApi = require('../common/api.js');
-
 
 // Application
 var application = new events.EventEmitter();
@@ -55,7 +56,7 @@ application.expressApp.configure(function () {
     require('jade');
     app.set('view options', {layout:false, pretty:true});
     app.set('view engine', 'jade');
-    app.use(express.bodyParser());
+    app.use(express.bodyParser({uploadDir:__dirname + '/../tmp/'}));
     app.use(express.static(config.admin.publicPath));
 });
 
@@ -76,7 +77,6 @@ application.db = new mongoDb.Db(config.db.name,
 
 application.db.open(function () {
     engineApi.initDb(application.db);
-
     application.db.collection('sequences', function (err, collection) {
         collection.insert({_id:'userSeqNumber', value:1});
 
@@ -141,7 +141,7 @@ var DashboardDef = {
         {
             name:'Game',
             subs:[
-                {name: 'DB Model', link: '#game/dbmodel'},
+                {name:'DB Model', link:'#game/dbmodel'},
                 {name:'Quests', link:'#game/quests'},
                 {name:'Events', link:'#game/events'}
             ]
@@ -182,6 +182,7 @@ expressApp.put('/api/def/:defId', function (req, res) {
     getModelDefinition(req.params.defId, res);
 });
 
+
 var items =
     [
         {id:1, name:"Item 1", type:"weapon"},
@@ -194,4 +195,35 @@ var items =
 
 expressApp.get('/admin/items/', function (req, res) {
     res.send(items);
+});
+
+
+expressApp.post('/admin/items/images/', function (req, res) {
+    var contentType = req.header("Content-Type");
+
+
+    if (contentType.indexOf('multipart/form-data') == 0) {
+        var file = req.files.file;
+        var ext = pathUtils.extname(file.name);
+        var filename = pathUtils.basename(file.path) + ext;
+        var target = __dirname + '/../public/images/items/' + filename;
+
+        fs.rename(file.path, target,
+            function (err) {
+                if (err != null) {
+                    console.log("Failed to upload " + err);
+                    res.send(500);
+                } else {
+                    res.send({file: '/images/items/' + filename});
+                }
+
+            });
+
+        // Add image to db
+        application.db.collection("images", function(err, collection) {
+            collection.insert({filename: filename, file: '/images/items/' + filename});
+        });
+    } else {
+        res.send(405);
+    }
 });
