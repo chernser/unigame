@@ -102,7 +102,7 @@ expressApp.get('/', function (req, res) {
 });
 
 
-/* Dashboard */
+// ------------------- Dashboard API -------------
 var DashboardDef = {
     nav:[
         {
@@ -156,9 +156,11 @@ expressApp.get('/admin/dashboard/:id', function (req, res) {
 });
 
 
-/* Defs */
+// ------------ Resource definition managemenet API -------------
+
+
 function getModelDefinition(defId, res) {
-    engineApi.getDef(application.db, defId, function(err, def){
+    engineApi.getDef(application.db, defId, function (err, def) {
         if (err != null) {
             res.send(500);
             return;
@@ -183,18 +185,127 @@ expressApp.put('/api/def/:defId', function (req, res) {
 });
 
 
-var items =
-    [
-        {id:1, name:"Item 1", type:"weapon"},
-        {id:2, name:"Item 2", type:"weapon"},
-        {id:3, name:"Item 3", type:"weapon"},
-        {id:4, name:"Item 4", type:"weapon"},
-        {id:5, name:"Item 5", type:"weapon"}
-    ];
+// ------------ Resource management API -----------
+
+// convert string to dbId
+function convertId(id) {
+    try {
+        return new (mongoDb.ObjectID).createFromHexString(id);
+    } catch (e) {
+        return null;
+    }
+}
+
+// checks if error and send response
+function isOk(err, httpResp) {
+    if (err) {
+        httpResp.send(500);
+        return false;
+    }
+    return true;
+}
+
+function doWithCollection(collectionName, httpResp, callback) {
+    application.db.collection(collectionName, function (err, collection) {
+        if (isOk(err, httpResp)) {
+            callback(collection);
+        }
+    });
+}
+
+// Get game resource
+function getResource(type, id, httpResp) {
+    var dbId = convertId(id);
+    if ((id != null) && (dbId == null)) {
+        httpResp.send(400);
+        return;
+    }
+
+    doWithCollection(type, httpResp, function (collection) {
+        var query = id == null ? {}: {_id: dbId};
+        collection.find(query, function (err, cursor) {
+            if (isOk(err, httpResp)) {
+                cursor.toArray(function(err, items) {
+                    if (isOk(err, httpResp)) {
+                        httpResp.send(id != null? items[0] : items);
+                    }
+                });
+            }
+        });
+    });
+}
+
+function newResource(type, resource, httpResp) {
+    doWithCollection(type, httpResp, function(collection) {
+        collection.insert(resource, function (err, doc) {
+            if (isOk(err, httpResp)) {
+                httpResp.send(doc[0]);
+            }
+        });
+    });
+}
+
+function putResource(type, id, resource, httpResp) {
+    var dbId = convertId(id);
+    if (dbId == null) {
+        httpResp.send(400);
+        return;
+    }
+
+    delete resource['_id'];
+
+    doWithCollection(type, httpResp, function(collection) {
+        collection.update({_id: dbId}, resource, null, function (err, doc) {
+            if (isOk(err, httpResp)) {
+                httpResp.send(204);
+            }
+        });
+    });
+}
 
 
-expressApp.get('/admin/items/', function (req, res) {
-    res.send(items);
+function delResource(type, id, httpResp) {
+    var dbId = convertId(id);
+    if (dbId == null) {
+        httpResp.send(400);
+        return;
+    }
+
+    doWithCollection(type, httpResp, function(collection) {
+        collection.remove({_id:dbId}, function (err, o) {
+            if (isOk(err, httpResp)) {
+                httpResp.send(202);
+            }
+        });
+    });
+}
+
+expressApp.get('/admin/items', function (req, res) {
+    getResource('items', null, res);
+});
+
+expressApp.get('/admin/items/:id', function (req, res) {
+    getResource('items', req.params.id, res);
+});
+
+expressApp.post('/admin/items', function (req, res) {
+    if (req.is('application/json')) {
+        newResource('items', req.body, res);
+    } else {
+        res.send(400);
+    }
+});
+
+expressApp.put('/admin/items/:id', function(req, res) {
+    if (req.is('application/json')) {
+        putResource('items', req.params.id, req.body, res);
+    } else {
+        res.send(400);
+    }
+});
+
+expressApp.delete('/admin/items/:id', function (req, res) {
+    delResource('items', req.params.id, res);
 });
 
 
@@ -214,14 +325,14 @@ expressApp.post('/admin/items/images/', function (req, res) {
                     console.log("Failed to upload " + err);
                     res.send(500);
                 } else {
-                    res.send({file: '/images/items/' + filename});
+                    res.send({file:'/images/items/' + filename});
                 }
 
             });
 
         // Add image to db
-        application.db.collection("images", function(err, collection) {
-            collection.insert({filename: filename, file: '/images/items/' + filename});
+        application.db.collection("images", function (err, collection) {
+            collection.insert({filename:filename, file:'/images/items/' + filename});
         });
     } else {
         res.send(405);

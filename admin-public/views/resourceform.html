@@ -1,27 +1,28 @@
     <form class="form-horizontal">
         <fieldset>
-            <legend>Item "Battle Axe" (id: 123)</legend>
+            <legend>{{type}} "{{title}}" (id: {{resId}})</legend>
             {{#each fields}}
             <div class="control-group">
                 <label class="control-label">{{name}}</label>
                 <div class="controls">
                     {{#if string}}
-                    <input name="{{name}}" type="text" class="input-xlarge">
+                    <input name="{{name}}" type="text" class="input-xlarge" value="{{value}}">
                     <!-- <p class="help-block">Supporting help text</p> -->
                     {{/if}}
 
                     {{#if integer}}
-                    <input name="{{name}}" type="text" class="input-xlarge">
+                    <input name="{{name}}" type="text" class="input-xlarge" value="{{value}}">
                     {{/if}}
 
                     {{#if float}}
-                    <input name="{{name}}" type="text" class="input-xlarge">
+                    <input name="{{name}}" type="text" class="input-xlarge" value="{{value}}">
                     {{/if}}
 
                     {{#if enum}}
                     <select name="{{name}}">
+                        <option></option>
                         {{#each consts}}
-                        <option>{{this}}</option>
+                        <option value="{{this}}">{{this}}</option>
                         {{/each}}
                     </select>
                     {{/if}}
@@ -43,9 +44,9 @@
         </fieldset>
 
         <div class="btn-group">
-            <button class="btn">Update</button>
-            <button class="btn">Copy</button>
-            <button class="btn">Delete</button>
+            <button id="updateResourceBtn" class="btn">Update</button>
+            <button id="copyResourceBtn" class="btn">Copy</button>
+            <button id="deleteResourceBtn" class="btn">Delete</button>
         </div>
 
     </form>
