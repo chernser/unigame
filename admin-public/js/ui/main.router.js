@@ -41,7 +41,8 @@ var MainRouter = Backbone.Router.extend({
     routes:{
 
         '':'showIndex',
-        'items/collection':'showItemsCollection',
+        'items/collection': 'showItemsCollection',
+        'items/shops': 'showShops',
         'game/dbmodel' : 'showGameDbModel'
     },
 
@@ -57,8 +58,14 @@ var MainRouter = Backbone.Router.extend({
 
     showGameDbModel : function() {
         debug("SHowing metamodel");
-        var models = ['Item', 'Character', 'ShopItem', 'User'];
+        var models = ['Item', 'Shop', 'ShopItem', 'User', 'Character'];
         var mgmtView = new GameDbModeView({models: models});
+        this.initDashboard(mgmtView);
+    },
+
+    showShops: function() {
+        debug("Showing shops");
+        var mgmtView = new ShopsMgmtView();
         this.initDashboard(mgmtView);
     }
 });

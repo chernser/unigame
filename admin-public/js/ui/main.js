@@ -6,6 +6,7 @@ require(
         'order!ui/dashboard.view',
         'order!ui/dashboard.model',
         'order!ui/itemscollection.view',
+        'order!ui/shopsmgmt.view',
         'order!ui/gamedbmodel.view',
         'order!ui/main.router'
     ],

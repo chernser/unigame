@@ -213,6 +213,24 @@ function doWithCollection(collectionName, httpResp, callback) {
     });
 }
 
+function fetchFromDb(collectionName, query, fields, httpResp) {
+    if (fields == null) {
+        fields = {};
+    }
+
+    doWithCollection(collectionName, httpResp, function (collection) {
+        collection.find(query, fields, function (err, cursor) {
+            if (isOk(err, httpResp)) {
+                cursor.toArray(function(err, docs) {
+                    if (isOk(err, httpResp)) {
+                        httpResp.send(docs);
+                    }
+                });
+            }
+        });
+    });
+}
+
 // Get game resource
 function getResource(type, id, httpResp) {
     var dbId = convertId(id);
@@ -222,12 +240,12 @@ function getResource(type, id, httpResp) {
     }
 
     doWithCollection(type, httpResp, function (collection) {
-        var query = id == null ? {}: {_id: dbId};
+        var query = id == null ? {} : {_id:dbId};
         collection.find(query, function (err, cursor) {
             if (isOk(err, httpResp)) {
-                cursor.toArray(function(err, items) {
+                cursor.toArray(function (err, items) {
                     if (isOk(err, httpResp)) {
-                        httpResp.send(id != null? items[0] : items);
+                        httpResp.send(id != null ? items[0] : items);
                     }
                 });
             }
@@ -236,7 +254,7 @@ function getResource(type, id, httpResp) {
 }
 
 function newResource(type, resource, httpResp) {
-    doWithCollection(type, httpResp, function(collection) {
+    doWithCollection(type, httpResp, function (collection) {
         collection.insert(resource, function (err, doc) {
             if (isOk(err, httpResp)) {
                 httpResp.send(doc[0]);
@@ -254,8 +272,8 @@ function putResource(type, id, resource, httpResp) {
 
     delete resource['_id'];
 
-    doWithCollection(type, httpResp, function(collection) {
-        collection.update({_id: dbId}, resource, null, function (err, doc) {
+    doWithCollection(type, httpResp, function (collection) {
+        collection.update({_id:dbId}, resource, null, function (err, doc) {
             if (isOk(err, httpResp)) {
                 httpResp.send(204);
             }
@@ -271,7 +289,7 @@ function delResource(type, id, httpResp) {
         return;
     }
 
-    doWithCollection(type, httpResp, function(collection) {
+    doWithCollection(type, httpResp, function (collection) {
         collection.remove({_id:dbId}, function (err, o) {
             if (isOk(err, httpResp)) {
                 httpResp.send(202);
@@ -296,7 +314,7 @@ expressApp.post('/admin/items', function (req, res) {
     }
 });
 
-expressApp.put('/admin/items/:id', function(req, res) {
+expressApp.put('/admin/items/:id', function (req, res) {
     if (req.is('application/json')) {
         putResource('items', req.params.id, req.body, res);
     } else {
@@ -335,6 +353,83 @@ expressApp.post('/admin/items/images/', function (req, res) {
             collection.insert({filename:filename, file:'/images/items/' + filename});
         });
     } else {
-        res.send(405);
+        res.send(400);
     }
+});
+
+
+expressApp.get('/admin/shops/', function (req, res) {
+    getResource('shops', null, res);
+});
+
+expressApp.get('/admin/shops/:id', function (req, res) {
+    getResource('shops', req.params.id, res);
+});
+
+expressApp.post('/admin/shops', function (req, res) {
+    if (req.is('application/json')) {
+        newResource('shops', req.body, res);
+    } else {
+        res.send(400);
+    }
+});
+
+expressApp.put('/admin/shops/:id', function (req, res) {
+    if (req.is('application/json')) {
+        putResource('shops', req.params.id, req.body, res);
+    } else {
+        res.send(400);
+    }
+});
+
+expressApp.delete('/admin/shops/:id', function (req, res) {
+    res.send(501);
+});
+
+expressApp.get('/admin/shops/:shop_id/items', function (req, res) {
+    if (convertId(req.params.shop_id) == null) {
+        res.send(400);
+        return;
+    }
+
+    var query = {shop_id:req.params.shop_id};
+    fetchFromDb('shop_items', query, null, res);
+});
+
+expressApp.get('/admin/shops/:shop_id/items/:id', function (req, res) {
+    if (convertId(req.params.shop_id) == null) {
+        res.send(400);
+        return;
+    }
+
+    getResource('shop_items', req.params.id, res);
+});
+
+
+expressApp.post('/admin/shops/:shop_id/items', function (req, res) {
+    if (convertId(req.params.shop_id) == null) {
+        res.send(400);
+        return;
+    }
+
+    if (req.is('application/json')) {
+        var resource = req.body;
+        resource['shop_id'] = req.params.shop_id;
+        newResource('shop_items', resource, res);
+    } else {
+        res.send(400);
+    }
+});
+
+expressApp.put('/admin/shops/:shop_id/items/:id', function (req, res) {
+    if (req.is('application/json')) {
+        putResource('shop_items', req.params.id, req.body, res);
+    } else {
+        res.send(400);
+    }
+});
+
+expressApp.delete('/admin/shops/:shop_id/items/:id', function(req, res) {
+    console.log("requesting item " + req.params.id + " from shop " + req.params.shop_id);
+    delResource('shop_items', req.params.id, res);
 });

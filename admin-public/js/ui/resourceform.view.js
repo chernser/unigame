@@ -70,7 +70,6 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
             }
 
             formFields.sort(function (a, b) {
-                debug("Compare  " + a.name + " (" + a.order + ") ?= " + b.name + " (" + b.order + ")");
                 if (a.order == b.order) {
                     if (a.name > b.name)
                         return 1;
@@ -93,8 +92,8 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
             if (this.resource != null) {
                 if (this.resource.has('name'))
                     context.title = this.resource.get('name');
-                if (this.resource.has('id'))
-                    context.resId = this.resource.get('id');
+                if (this.resource.has('_id'))
+                    context.resId = this.resource.get('_id');
             }
 
             return context;
@@ -104,8 +103,7 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
             var that = this;
             $(this.el).ready(function () {
                 // update selects
-
-                $("select").each(function(index, item) {
+                $(that.el).find("select").each(function(index, item) {
                     var fieldName = $(item).attr("name");
                     var fieldValue = that.resource.get(fieldName);
                     $(item).val(fieldValue);
@@ -142,7 +140,7 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
 
         events: {
             'click #updateResourceBtn' : 'updateResource',
-            'click #copyResourceBtn'   : 'copyResource',
+            'click #copyResourceBtn' : 'copyResource',
             'click #deleteResourceBtn' : 'deleteResource'
         },
 
@@ -150,7 +148,7 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
             if (_.isFunction(this.onUpdate)) {
 
                 var resource = this.resource;
-                this.$el.find("input, select").each(function(index, item) {
+                $(this.el).find("input, select").each(function(index, item) {
                     var fieldName = $(item).attr("name");
                     var fieldValue = $(item).val();
                     resource.attributes[fieldName] = fieldValue;
@@ -168,6 +166,7 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
         },
 
         deleteResource: function() {
+            this.resource.destroy();
             if (_.isFunction(this.onDelete)) {
                 this.onDelete();
             }

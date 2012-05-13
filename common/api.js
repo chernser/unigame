@@ -131,6 +131,25 @@ var initialDbModels = [
         }
     },
 
+    /* Shop */
+    {
+        _id:'Shop',
+        name: {
+            type: "string",
+            mandatory: true
+        },
+
+        owners: {
+            type: "string",
+            mandatory: true
+        },
+
+        cash: {
+            type: "float",
+            mandatory: true
+        }
+    },
+
     /* Shop Item */
     {
         _id:'ShopItem',

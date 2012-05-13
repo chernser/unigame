@@ -22,7 +22,7 @@ var ItemsCollectionView = Backbone.View.extend(_.extend(CommonView, {
                 colNames:['Id', 'Name', 'Type'],
                 colModel:[
                     {name:'id', index: 'id', jsonmap:'_id', width: 50},
-                    {name:'name1', index:'name', jsonmap:'name', width:55},
+                    {name:'name', index:'name', jsonmap:'name', width:55},
                     {name:'type', index:'type', jsonmap:'type', width:90}
 
                 ],
@@ -84,12 +84,11 @@ var ItemsCollectionView = Backbone.View.extend(_.extend(CommonView, {
             UniGameAdmin.app.addRegions({ resource_form:"#resource_form"});
             var itemFieldsOrder = ['name', 'image'];
             var onUpdate = function (fields) {
-                debug("onUpdate callback");
                 $("#items_collection_tbl").jqGrid().trigger('reloadGrid');
             };
 
             var view = new ResourceFormView({model:view.defModel, resource: item,
-                fieldsOrder:itemFieldsOrder, onUpdate:onUpdate});
+                fieldsOrder:itemFieldsOrder, onUpdate:onUpdate, onDelete: onUpdate});
             UniGameAdmin.app.resource_form.show(view);
         },
 
