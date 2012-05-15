@@ -153,6 +153,9 @@ var GameDbModeView = Backbone.View.extend(_.extend(CommonView, {
                 } else if (fieldType == 'image') {
                     $(args).find("label").text("Base URL");
                     $(args).find("[name=args]").val(fieldDef.url);
+                } else if (fieldType == 'ref' || fieldType == 'multiref') {
+                    $(args).find("label").text("Base URL");
+                    $(args).find("[name=args]").val(fieldDef.url);
                 } else {
                     $(args).hide();
                 }
@@ -185,6 +188,9 @@ var GameDbModeView = Backbone.View.extend(_.extend(CommonView, {
                         fieldDef.consts = args.split(',');
                     }
                     if (fieldType == 'image') {
+                        fieldDef.url = args;
+                    }
+                    if (fieldType == 'ref' || fieldType == 'multiref') {
                         fieldDef.url = args;
                     }
 

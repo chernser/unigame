@@ -148,7 +148,6 @@ var ShopsMgmtView = Backbone.View.extend(_.extend(CommonView,
                 success: function(model, response) {
                     that.reloadShopForm(that, model);
                     var shopItemsUrl = '/admin/shops/' + model.get("_id") + '/items/';
-                    debug('reloading items: ' + shopItemsUrl);
                     $("#shop_items_collection_tbl").setGridParam({url: shopItemsUrl}).trigger('reloadGrid');
                 },
 

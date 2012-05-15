@@ -99,9 +99,62 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
             return context;
         },
 
+        prepareReferencesList: function(field, url) {
+            debug("Preparing refs list for " + field + " base url: " + url);
+            var that = this;
+            var options = {
+                url: '/admin' + url,
+                datatype:'json',
+                mtype:'GET',
+                colNames:['Id', 'name'],
+                colModel:[
+                    {name:'id', index:'id', jsonmap:'_id', width:50},
+                    {name:'name', index:'name', jsonmap:'name', width:55}
+                ],
+                jsonReader:{
+                    repeatitems:false,
+                    id:"id",
+                    root:function (obj) {
+                        return obj;
+                    },
+                    page:function (obj) {
+                        return 1;
+                    },
+                    total:function (obj) {
+                        return 1;
+                    },
+                    records:function (obj) {
+                        return obj.length;
+                    }
+                },
+                width:530,
+                rowNum:10,
+                rowList:[10, 20, 30],
+                sortname:'name',
+                sortorder:'desc',
+                viewrecords:false,
+
+                ondblClickRow:function (rowid) {
+                    that.selectObjectRef();
+                }
+            };
+
+            $("#refs_select_tbl").jqGrid(options);
+        },
+
         onShow:function () {
             var that = this;
             $(this.el).ready(function () {
+                // bind event to refselect buttons
+                $(that.el).find('button.refselect').click(function() {
+                    var field = $(this).attr("field");
+                    var url = $(this).attr("url");
+                    that.prepareReferencesList(field, url);
+                    var dlg = $("#ref_select_dlg");
+                    dlg.attr('field', field);
+                    dlg.modal();
+                });
+
                 // update selects
                 $(that.el).find("select").each(function(index, item) {
                     var fieldName = $(item).attr("name");
@@ -138,10 +191,21 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
             });
         },
 
+        getSelectedRef: function() {
+            var rowId = $('#refs_select_tbl').jqGrid('getGridParam', 'selrow');
+            if (rowId != null) {
+                return $("#refs_select_tbl").jqGrid('getRowData', rowId);
+            }
+
+            return null;
+        },
+
         events: {
             'click #updateResourceBtn' : 'updateResource',
             'click #copyResourceBtn' : 'copyResource',
-            'click #deleteResourceBtn' : 'deleteResource'
+            'click #deleteResourceBtn' : 'deleteResource',
+
+            'click #selectObjectBtn' : 'selectObjectRef'
         },
 
         updateResource: function() {
@@ -169,6 +233,17 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
             this.resource.destroy();
             if (_.isFunction(this.onDelete)) {
                 this.onDelete();
+            }
+        },
+
+        selectObjectRef: function() {
+            debug("select object reference");
+            $("#ref_select_dlg").modal('hide');
+            var refObj = this.getSelectedRef();
+            if (refObj != null) {
+                var field = $("#ref_select_dlg").attr('field');
+                debug("ref " + refObj.id + " for field " + field);
+                $("[name=" + field + "]").val(refObj.id);
             }
         }
     }

@@ -154,7 +154,8 @@ var initialDbModels = [
     {
         _id:'ShopItem',
         item_id: {
-            type: "string",
+            type: "ref",
+            url: "/items",
             mandatory:true
         },
 
