@@ -142,6 +142,54 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
             $("#refs_select_tbl").jqGrid(options);
         },
 
+        prepareImageList: function() {
+            var that = this;
+            var options = {
+                url: '/admin/images',
+                datatype:'json',
+                mtype:'GET',
+                colNames:['Id', 'Name', 'File'],
+                colModel:[
+                    {name:'id', index:'id', jsonmap:'_id', width:50},
+                    {name:'name', index:'name', jsonmap:'name', width:55},
+                    {name:'file', index: 'file', jsonmap:'file', hidden: true}
+                ],
+                jsonReader:{
+                    repeatitems:false,
+                    id:"id",
+                    root:function (obj) {
+                        return obj;
+                    },
+                    page:function (obj) {
+                        return 1;
+                    },
+                    total:function (obj) {
+                        return 1;
+                    },
+                    records:function (obj) {
+                        return obj.length;
+                    }
+                },
+                width:530,
+                rowNum:10,
+                rowList:[10, 20, 30],
+                sortname:'name',
+                sortorder:'desc',
+                viewrecords:false,
+
+                ondblClickRow:function (rowid) {
+                    that.selectImage();
+                },
+
+                onSelectRow: function(rowid) {
+                    var image = that.getSelectedImage();
+                    $("#selected_img").attr("src", image.file);
+                }
+            };
+
+            $("#imgs_select_tbl").jqGrid(options);
+        },
+
         onShow:function () {
             var that = this;
             $(this.el).ready(function () {
@@ -151,6 +199,15 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
                     var url = $(this).attr("url");
                     that.prepareReferencesList(field, url);
                     var dlg = $("#ref_select_dlg");
+                    dlg.attr('field', field);
+                    dlg.modal();
+                });
+
+                // bind events to image placeholders
+                $(that.el).find('img.img-placeholder').click(function() {
+                    var field = $(this).attr("field");
+                    that.prepareImageList($(this).attr('id'));
+                    var dlg = $("#img_select_dlg");
                     dlg.attr('field', field);
                     dlg.modal();
                 });
@@ -180,6 +237,7 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
 
                                 if (!_.isUndefined(responseText.file)) {
                                     $("#" + fieldName + '_img')[0].src = responseText.file;
+                                    $("[name=" + fieldName + "]").val(responseText.file);
                                 }
                             }
                         });
@@ -200,12 +258,23 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
             return null;
         },
 
+        getSelectedImage: function() {
+            var rowId = $('#imgs_select_tbl').jqGrid('getGridParam', 'selrow');
+            if (rowId != null) {
+                return $("#imgs_select_tbl").jqGrid('getRowData', rowId);
+            }
+
+            return null;
+        },
+
         events: {
             'click #updateResourceBtn' : 'updateResource',
             'click #copyResourceBtn' : 'copyResource',
             'click #deleteResourceBtn' : 'deleteResource',
 
-            'click #selectObjectBtn' : 'selectObjectRef'
+            // Dialog's events
+            'click #selectObjectBtn' : 'selectObjectRef',
+            'click #selectImgBtn' : 'selectImage'
         },
 
         updateResource: function() {
@@ -244,6 +313,16 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
                 var field = $("#ref_select_dlg").attr('field');
                 debug("ref " + refObj.id + " for field " + field);
                 $("[name=" + field + "]").val(refObj.id);
+            }
+        },
+
+        selectImage: function() {
+            $("#img_select_dlg").modal('hide');
+            var image = this.getSelectedImage();
+            if (image != null) {
+                var field = $("#img_select_dlg").attr('field');
+                $("#" + field + "_img").attr("src", image.file);
+                $("[name=" + field + "]").val(image.file);
             }
         }
     }

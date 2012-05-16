@@ -327,6 +327,14 @@ expressApp.delete('/admin/items/:id', function (req, res) {
 });
 
 
+expressApp.get('/admin/images', function(req, res) {
+    getResource('images', null, res);
+});
+
+expressApp.get('/admin/images/:id', function(req, res) {
+    getResource('images', req.params.id, res);
+});
+
 expressApp.post('/admin/items/images/', function (req, res) {
     var contentType = req.header("Content-Type");
 
@@ -350,7 +358,7 @@ expressApp.post('/admin/items/images/', function (req, res) {
 
         // Add image to db
         application.db.collection("images", function (err, collection) {
-            collection.insert({filename:filename, file:'/images/items/' + filename});
+            collection.insert({name:filename, file:'/images/items/' + filename});
         });
     } else {
         res.send(400);

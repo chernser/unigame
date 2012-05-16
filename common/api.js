@@ -97,6 +97,22 @@ module.exports.updateDef = function (db, modelName, newDef) {
 // Initial models definitions
 var initialDbModels = [
 
+    /* Image */
+    {
+        _id: 'Image',
+
+        name: {
+            type: "string",
+            mandatory: true
+        },
+
+
+        file: {
+            type: "string",
+            mandatory: true
+        }
+    },
+
     /* Item */
     {
         _id:'Item',

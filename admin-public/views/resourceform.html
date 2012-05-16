@@ -29,8 +29,9 @@
                 {{/if}}
 
                 {{#if image}}
-                <a href="#"><img id='{{name}}_img' class="img-placeholder" alt=""></a>
-
+                <img style="cursor:pointer;" src="{{value}}" field="{{name}}"
+                     id='{{name}}_img' class="img-placeholder" alt="">
+                <input type="hidden" name="{{name}}" value="{{value}}">
                 <div id="file-uploader" fieldname='{{name}}'>
                     <form action="resourceform.html"></form>
                     <noscript>
@@ -60,7 +61,7 @@
         <button id="deleteResourceBtn" class="btn">Delete</button>
     </div>
 
-    <!-- Dlg -->
+    <!-- Reference Select Dialog -->
     <div id="ref_select_dlg" class="modal hide fade">
         <div class="modal-header">
             <h3>Select Object Reference</h3>
@@ -75,4 +76,23 @@
                 <button onclick="javascript:$('#ref_select_dlg').modal('hide')" class="btn">Cancel</button>
         </div>
     </div>
+
+    <!-- Image Select Dialog -->
+    <div id="img_select_dlg" class="modal hide fade">
+        <div class="modal-header">
+            <h3>Select Object Reference</h3>
+        </div>
+        <div class="modal-body centered">
+            <img id='selected_img' class="img-placeholder" alt="">
+            <hr>
+            <table id="imgs_select_tbl"></table>
+        </div>
+
+
+        <div class="modal-footer">
+            <button id="selectImgBtn" class="btn">Select</button>
+            <button onclick="javascript:$('#img_select_dlg').modal('hide')" class="btn">Cancel</button>
+        </div>
+    </div>
+
 </div>
