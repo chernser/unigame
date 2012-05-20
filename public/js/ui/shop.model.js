@@ -4,7 +4,7 @@ var ShopModel = Backbone.Model.extend({
 
     idAttribute: "_id",
 
-    urlRoot: '/engine/shop',
+    urlRoot: '/game/shops',
 
     initialize: function(attributes)  {
 

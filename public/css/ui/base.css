@@ -46,10 +46,12 @@ input[type="button"].small-button  {
 
 
 #health {
+    font-family: monospace;
     color: #f00;
 }
 
 #manna {
+    font-family: monospace;
     color: #00f;
 }
 

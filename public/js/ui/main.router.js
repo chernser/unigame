@@ -27,6 +27,7 @@ var MainRouter = Backbone.Router.extend({
         'loc/:id':'gotoLocation',
         'loc/arena/:id':'gotoArena',
         'loc/shop/:id':'gotoShop',
+        'loc/shop/:id/:category': 'gotoShop',
         'loc/smith/:id':'gotoSmith',
         'loc/tavern/:id':'gotoTavern'
     },
@@ -92,12 +93,12 @@ var MainRouter = Backbone.Router.extend({
         debug("arena: " + id);
     },
 
-    gotoShop: function(id) {
+    gotoShop: function(id, category) {
         debug("shop: " + id);
         UniGame.shop = new ShopModel({_id: id});
         UniGame.shop.fetch({
             success: function() {
-                UniGame.shop_view = new ShopView({model: UniGame.shop});
+                UniGame.shop_view = new ShopView({model: UniGame.shop, selectedCategory: category});
                 UniGame.app.mainRegion.show(UniGame.shop_view);
             },
 

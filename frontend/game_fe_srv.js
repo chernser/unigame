@@ -13,6 +13,7 @@ var express = require('express');
 var mongoDb = require('mongodb');
 
 
+
 // Application
 var application = new events.EventEmitter();
 
@@ -83,6 +84,8 @@ application.expressApp.configure('development', function() {
 // Initialize DB
 application.db = new mongoDb.Db(config.db.name,
     new mongoDb.Server('localhost', 27017, {}), {});
+
+application.db_utils = new (require('../common/db_utils.js'))(application.db);
 
 application.db.open(function() {
     application.db.collection('sequences', function(err, collection) {
@@ -172,7 +175,7 @@ expressApp.get('/engine/location/:id', function(req, res) {
             name: req.params.id,
 
             paths: [
-                {title: "Shop \"Zuki\"", action: "shop/shop_1"},
+                {title: "Shop \"Zuki\"", action: "shop/4faf78027a0ce88f5d000023"},
                 {title: "Smith \"Jenkins\"", action: "smith/smith_1"},
                 {title: "Town Center", action: "towncenter"},
                 {title: "Sleepy Wood", action: "sleepywood"}
@@ -185,16 +188,27 @@ expressApp.get('/engine/location/:id', function(req, res) {
 });
 
 
-var mockShop = {
-    title: "Лавочка Зуки",
+function getId(req) {
+    return _.isUndefined(req.params.id) ? null : req.params.id;
+}
 
-    items: [
+expressApp.get('/game/shops/(:id){0,1}', function(req, res) {
+   application.db_utils.getResource('shops', getId(req), res);
+});
 
-    ]
-};
+expressApp.get('/game/shops/:id/items/(:category){0,1}', function(req, res) {
+    var shopId = req.params.id;
+    var category = req.params.category;
+    console.log("getting items of category '" + category + "' from shop: '" + shopId + "'");
+    var query = {shop_id: shopId};
+    if (!_.isUndefined(category)) {
+        query.category = category;
+    }
+    var fields = {category: 1, item_id: 1, cost: 1, _id: 1};
+    application.db_utils.fetchFromDb('shop_items', query, fields, res);
+});
 
 
-expressApp.get('/engine/shop/:id', function(req, res) {
-
-    res.send(mockShop);
+expressApp.get('/game/items/(:id){0,1}', function(req, res) {
+    application.db_utils.getResource('items', getId(req), res);
 });

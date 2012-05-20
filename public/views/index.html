@@ -1,19 +1,21 @@
 <h1>{{title}}</h1>
 
-<div>
-    <div class="columns six">
+<div class="row">
+    <div class="span6">
         <p>
             {{desc}}
         </p>
     </div>
-    <div class="columns four">
+    <div class="span4">
         <fieldset>
             <p><label>EMail</label><input id="email" type="text"></p>
 
             <p><label>Password</label><input id="password" type="password"></p>
 
-            <p><input id="enterBtn" type="button" value="enter"><input id="registerBtn" type="button" value="register">
-            </p>
+            <div class="btn-group">
+                <button id="enterBtn" class="btn">Enter</button>
+                <button id="registrationBtn" class="btn">Register</button>
+            </div>
         </fieldset>
     </div>
 </div>

@@ -11,8 +11,8 @@ var IndexView = Backbone.View.extend(_.extend(CommonView,
         },
 
         events: {
-            'click #enterBtn' : 'enterGame'
-
+            'click #enterBtn' : 'enterGame',
+            'click #registrationBrn' : 'registerMe'
         },
 
         enterGame: function() {
@@ -22,6 +22,10 @@ var IndexView = Backbone.View.extend(_.extend(CommonView,
             // TODO: call server login procedure to make /user/_current available for current session
             UniGame.user = new UserModel({_id: "__current"})
             UniGame.router.navigate('loc', {trigger: true});
+        },
+
+        registerMe: function() {
+
         }
 
     }

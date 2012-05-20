@@ -1,7 +1,7 @@
-<div class="column">
+<div class="row">
     <h2>{{title}}</h2>
-    <div class="columns eleven">
-        <ul>
+    <div class="span8">
+        <ul id="shop_items">
             {{#items}}
             <li>
                 <h5>{{title}}</h5>
@@ -17,7 +17,7 @@
         
     </div>
 
-    <div class="columns four">
+    <div class="span4">
         <ul>
             {{#categories}}
             <li><a href="#loc/shop/{{../shopId}}/{{key}}">{{title}}</a></li>

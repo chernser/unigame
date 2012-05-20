@@ -8,16 +8,16 @@ var ShopsMgmtView = Backbone.View.extend(_.extend(CommonView,
 
         onShow:function () {
             var that = this;
-            debug("Post render shop items collection");
             var options = {
                 url:'',
                 datatype:'json',
                 mtype:'GET',
-                colNames:['Id', 'Item_id', 'Category'],
+                colNames:['Id', 'Item_id', 'Category', 'Cost'],
                 colModel:[
                     {name:'id', index:'id', jsonmap:'_id', width:50},
                     {name:'item_id', index:'item_id', jsonmap:'item_id', width:55},
-                    {name:'category', index:'category', jsonmap:'category', width:90}
+                    {name:'category', index:'category', jsonmap:'category', width:60},
+                    {name:'cost', index:'cost', jsonmap:'cost', width:60}
 
                 ],
                 jsonReader:{

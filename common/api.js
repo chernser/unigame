@@ -179,6 +179,11 @@ var initialDbModels = [
             type: "enum",
             consts: ['weapon', 'armor', 'food', 'amunition', 'potions', 'misc'],
             mandatory:true
+        },
+
+        cost: {
+            type: "float",
+            mandatory:true
         }
     },
 
@@ -242,6 +247,11 @@ var initialDbModels = [
         status:{
             type:"enum",
             consts:["active", "archived", "banned", "deleted"],
+            mandatory:true
+        },
+
+        amount_of_cash:{
+            type:"float",
             mandatory:true
         },
 
