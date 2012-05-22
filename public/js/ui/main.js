@@ -1,4 +1,8 @@
-
+function redirectIfUnathorized(response) {
+    if (response.status == 401) {
+        window.location = '/';
+    }
+}
 
 
 require(
@@ -8,6 +12,7 @@ require(
         'order!ui/shop.model',
         'order!ui/common.view',
         'order!ui/index.view',
+        'order!ui/registration.view',
         'order!ui/location.view',
         'order!ui/character.view',
         'order!ui/chat.view',

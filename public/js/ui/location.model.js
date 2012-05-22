@@ -4,7 +4,7 @@ var LocationModel = Backbone.Model.extend({
 
     idAttribute: 'name',
 
-    urlRoot: '/engine/location',
+    urlRoot: '/game/location',
 
     initialize: function(attributes) {
 

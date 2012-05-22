@@ -1,3 +1,121 @@
 <div class="span12">
+    <h1>Welcome to UniGame!</h1>
 
+    {{#if step1}}
+    <h2>Step: 1 (general information)</h2>
+    <br>
+    <fieldset class="form-horizontal">
+        <div class="control-group {{invalid.email}}">
+            <label class="control-label">E-mail</label>
+
+            <div class="controls">
+                <input id="email" type="text" class="input-xlarge" value="{{fields.email}}">
+                <p class="help-block">
+                    {{#if invalid.email}}
+                    E-Mail field should be valid E-Mail Address
+                    {{else}}
+                    E-Mail will be used to identify you
+                    {{/if}}
+                </p>
+            </div>
+        </div>
+        <div class="control-group {{invalid.password}}">
+            <label class="control-label">Password</label>
+
+            <div class="controls">
+                <input id="password" type="password" class="input-xlarge" value="">
+
+                <p class="help-block">Please select secure password</p>
+            </div>
+        </div>
+        <div class="control-group {{invalid.retyped_password}}">
+            <label class="control-label">Re-type Password</label>
+
+            <div class="controls">
+                <input id="retyped_password" type="password" class="input-xlarge" value="">
+
+                <p class="help-block">Please select secure password</p>
+            </div>
+        </div>
+        <div class="control-group {{invalid.first_last_names}}">
+            <label class="control-label">First and Second Names</label>
+
+            <div class="controls">
+                <input id="first_name" type="text" class="input-xlarge" value="{{fields.first_name}}">
+                <input id="last_name" type="text" class="input-xlarge" value="{{fields.last_name}}">
+
+                <p class="help-block">Names will be used for email sending to you</p>
+            </div>
+        </div>
+        <div class="control-group {{invalid.gender}}">
+            <label class="control-label">Gender</label>
+
+            <div class="controls">
+                <select id="gender">
+                    <option value="none"></option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+                {{#if invalid.gender}}
+                <p class="help-block">Please select one of values</p>
+                {{/if}}
+            </div>
+        </div>
+        <div class="control-group {{invalid.agreement}}">
+            <label class="control-label">I'm agree with license </label>
+
+            <div class="controls">
+                <input id="agreement" class="input-xlarge" type="checkbox">
+            </div>
+        </div>
+        <hr>
+        <button id="step2Btn" class="btn">Next step</button>
+    </fieldset>
+    {{/if}}
+
+
+    {{#if step2}}
+    <h2>Step: 2 (character generation)</h2>
+    <br>
+
+    <fieldset class="form-horizontal">
+        <div class="control-group {{invalid.character_name}}">
+            <label class="control-label">Character Name</label>
+
+            <div class="controls">
+                <input id="character_name" type="text" class="input-xlarge " value="{{fields.character_name}}">
+
+            </div>
+        </div>
+
+        <div class="control-group {{invalid.character_gender}}">
+            <label class="control-label">Character Gender</label>
+
+            <div class="controls">
+                <select id="character_gender">
+                    <option value="none"></option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+        </div>
+
+        <hr>
+        <div class="btn-group">
+            <button id="step1Btn" class="btn">Step 1</button>
+            <button id="finishBtn" class="btn">Finish</button>
+        </div>
+    </fieldset>
+    {{/if}}
+    
+    
+    {{#if stepFinish}}
+    <div class="centered">
+        <h2>Now you are registered one.</h2>
+        <p>We have sent you mail with confirmation link. Follow it to activate your account
+            it will be alive for 1 day) and login</p>
+        <a href="/" >To Index</a>
+    </div>
+    
+    {{/if}}
 </div>

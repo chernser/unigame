@@ -12,20 +12,41 @@ var IndexView = Backbone.View.extend(_.extend(CommonView,
 
         events: {
             'click #enterBtn' : 'enterGame',
-            'click #registrationBrn' : 'registerMe'
+            'click #registrationBtn' : 'registerMe'
         },
 
         enterGame: function() {
             var email = $("#email").val();
-            debug("Entering game as: " + email);
+            var password = $("#password").val();
+            debug("Entering game as: " + email + ':' + password);
 
-            // TODO: call server login procedure to make /user/_current available for current session
-            UniGame.user = new UserModel({_id: "__current"})
-            UniGame.router.navigate('loc', {trigger: true});
+            // for development
+            email =  "get@it.it";
+            password = "deadass";
+
+            $.ajax({
+                contentType: 'application/json',
+                type: 'POST',
+                url: '/auth',
+                data: JSON.stringify({
+                    user_name: email,
+                    pass: password
+                }),
+
+                success: function(response) {
+                    UniGame.user = new UserModel({_id: "__current"})
+                    UniGame.router.navigate('loc', {trigger: true});
+                },
+
+                error: function(response) {
+                    error("Invalid Credentials");
+                }
+            })
         },
 
         registerMe: function() {
-
+            debug("going to registration")
+            UniGame.router.navigate('registration', {trigger: true});
         }
 
     }

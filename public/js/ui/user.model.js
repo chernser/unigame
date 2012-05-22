@@ -6,7 +6,7 @@ var UserModel = Backbone.Model.extend({
 
     idAttribute: '_id',
 
-    urlRoot: '/engine/user',
+    urlRoot: '/game/user',
 
     initialize: function(attributes) {
 

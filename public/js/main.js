@@ -6,12 +6,25 @@ function debug(msg) {
         console.log(msg);
 }
 
+function error(msg) {
+    $.noty({text: msg, type: 'error', timeout: 5000,"theme":"noty_theme_twitter"});
+}
+
+function warning(msg) {
+    $.noty({text: msg, type: 'alert', timeout: 5000,"theme":"noty_theme_twitter"});
+}
+
+function success(msg) {
+    $.noty({text: msg, type: 'success', timeout: 5000,"theme":"noty_theme_twitter"});
+}
+
 // UniGame workspace
 var UniGame = {};
 
 require(
 [
     'order!lib/jquery.1.7.1',
+    'order!lib/jquery.noty',
     'order!lib/underscore',
     'order!lib/handlebars',
     'order!lib/backbone',

@@ -53,7 +53,7 @@ var dbUtils = module.exports.prototype = {
         });
     },
 
-    getResource:function (type, id, httpResp) {
+    getResource:function (type, id, httpResp, callback) {
         var dbId = dbUtils.convertId(id);
         if ((id != null) && (dbId == null)) {
             httpResp.send(400);
@@ -66,7 +66,12 @@ var dbUtils = module.exports.prototype = {
                 if (dbUtils.isOk(err, httpResp)) {
                     cursor.toArray(function (err, items) {
                         if (dbUtils.isOk(err, httpResp)) {
-                            httpResp.send(id != null ? items[0] : items);
+                            console.log('isOK');
+                            if (typeof callback != 'undefined' && callback != null) {
+                                callback(items);
+                            } else {
+                                httpResp.send(id != null ? items[0] : items);
+                            }
                         }
                     });
                 }

@@ -11,8 +11,9 @@ var MainRouter = Backbone.Router.extend({
                 deferred.resolve();
             },
 
-            error:function (model, reponse) {
+            error:function (model, response) {
                 debug("Error while fetching user");
+                redirectIfUnathorized(response);
                 deferred.cancel();
             }
         });
@@ -23,13 +24,18 @@ var MainRouter = Backbone.Router.extend({
     routes:{
 
         '':'showIndex',
+
+        // Location routes
         'loc':'showLocation',
         'loc/:id':'gotoLocation',
         'loc/arena/:id':'gotoArena',
         'loc/shop/:id':'gotoShop',
         'loc/shop/:id/:category': 'gotoShop',
         'loc/smith/:id':'gotoSmith',
-        'loc/tavern/:id':'gotoTavern'
+        'loc/tavern/:id':'gotoTavern',
+
+        // Registration routes
+        'registration' : 'showRegistration'
     },
 
     showIndex:function () {
@@ -116,5 +122,12 @@ var MainRouter = Backbone.Router.extend({
 
     gotoTavern: function(id) {
         debug("tavern: " + id);
+    },
+
+
+    showRegistration: function() {
+
+        var regView = new RegistrationView();
+        UniGame.app.mainRegion.show(regView);
     }
 });
