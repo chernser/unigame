@@ -11,6 +11,7 @@ var events = require('events');
 var _ = require('underscore');
 var express = require('express');
 var mongoDb = require('mongodb');
+var engineApi = require('../common/api.js');
 
 
 // Application
@@ -90,6 +91,8 @@ application.db.open(function () {
 /// Start listening when everyone is ready
 application.onReady = function () {
     console.log('application is initialized');
+    engineApi.initDb(application.db);
+
     application.expressApp.listen(config.game.server.port);
 };
 
@@ -153,7 +156,7 @@ function validateRegistrationForm(form) {
 
     return validationResult;
 }
-;
+
 
 function registerNewUser(form, httpResp) {
 
@@ -198,10 +201,10 @@ function registerNewUser(form, httpResp) {
         });
     }
 
-    var character = {
+    var character = engineApi.createResource('Character', {
         name:form.character_name,
         gender:form.character_gender
-    };
+    });
 
     function deleteCharacter(characterId) {
         application.db_utils.doWithCollection('characters', httpResp, function (collection) {
@@ -247,14 +250,19 @@ function getUserMongoId(req) {
 }
 
 function authenticate(userId, password, req, res) {
-    application.db_utils.doWithCollection('users', res, function(collection) {
-        collection.find({email: userId}, {email: 1, password: 1}, function(err, cursor) {
+    application.db_utils.doWithCollection('users', res, function (collection) {
+        var fields = {
+            email: 1,
+            password: 1,
+            current_character_id: 1
+        };
+        collection.find({email:userId}, fields, function (err, cursor) {
             if (err != null) {
                 res.send(500);
                 return;
             }
 
-            cursor.toArray(function(err, docs) {
+            cursor.toArray(function (err, docs) {
                 if (err != null) {
                     res.send(500);
                     return;
@@ -270,6 +278,7 @@ function authenticate(userId, password, req, res) {
                 } else {
                     req.session.authenticated = true;
                     req.session.user_id = docs[0]._id;
+                    req.session.character_id = docs[0].current_character_id;
                     req.session.user_name = docs[0].email;
                     res.send(200);
                 }
@@ -300,42 +309,65 @@ expressApp.get('/auth/(:action){0,1}', checkSession, function (req, res) {
     res.send(202);
 });
 
-var mockUser = {
-    id:"__current",
-    first_name:'Sergey',
-    last_name:'Chernov',
-    avatar_name:'Bhaal',
-    location:'CentralStation'
-};
+expressApp.get('/game/users/:id', checkSession, function (req, res) {
 
-expressApp.get('/game/user/__current', checkSession, function(req, res) {
+    if (req.params.id == '__current' || req.params.id == req.session.user_id) {
+        application.db_utils.getResource('users', req.session.user_id, res, function (resources) {
+            if (resources.length == 0) {
+                res.send(404);
+                return;
+            }
 
-    application.db_utils.getResource('users', req.session.user_id, res, function(resources) {
-        if (resources.length == 0) {
-            res.send(404);
-            return;
-        }
-
-        var user = resources[0];
-        user._id = '__current';
-        if (_.isUndefined(user.location)) { user.location = 'CentralStation'; }
-
-        res.send(user);
-    });
+            var user = resources[0];
+            user._id = '__current';
+            res.send(user);
+        });
+    } else {
+        res.send(403);
+    }
 
 });
 
-expressApp.put('/game/user/__current', checkSession, function(req, res){
+expressApp.put('/game/users/:id', checkSession, function (req, res) {
     if (req.is('application/json')) {
-        var user = req.body;
-        application.db_utils.putResource('users', req.session.user_id, user, res);
+        if (req.params.id == '__current' || req.params.id == req.session.user_id) {
+            var user = req.body;
+            application.db_utils.putResource('users', req.session.user_id, user, res);
+        } else {
+            res.send(403);
+        }
     } else {
         res.send(400);
     }
 });
 
+expressApp.get('/game/characters/:id', checkSession, function (req, res) {
+    if (req.params.id == '__current' || req.params.id == req.session.character_id) {
+        application.db_utils.getResource('characters', req.session.character_id, res, function (resources) {
+            if (resources.length == 0) {
+                res.send(404);
+                return;
+            }
 
-expressApp.get('/game/location/:id', checkSession, function (req, res) {
+            var character = resources[0];
+            character._id = '__current';
+            res.send(character);
+        });
+    } else {
+        res.send(403);
+    }
+});
+
+expressApp.put('/game/characters/:id', checkSession, function(req, res) {
+    if (req.params.id == '__current' || req.params.id == req.session.character_id) {
+        var character = req.body;
+        application.db_utils.putResource('characters', req.session.character_id, character, res);
+    } else {
+        res.send(403);
+    }
+});
+
+expressApp.get('/game/locations/:id', checkSession, function (req, res) {
 
     var mockLocation = null;
     if (req.params.id == 'towncenter') {

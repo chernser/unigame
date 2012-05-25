@@ -186,129 +186,25 @@ expressApp.put('/api/def/:defId', function (req, res) {
 
 
 // ------------ Resource management API -----------
+var db_utils = new (require('../common/db_utils.js'))(application.db);
 
-// convert string to dbId
-function convertId(id) {
-    try {
-        return new (mongoDb.ObjectID).createFromHexString(id);
-    } catch (e) {
-        return null;
-    }
-}
-
-// checks if error and send response
-function isOk(err, httpResp) {
-    if (err) {
-        httpResp.send(500);
-        return false;
-    }
-    return true;
-}
-
-function doWithCollection(collectionName, httpResp, callback) {
-    application.db.collection(collectionName, function (err, collection) {
-        if (isOk(err, httpResp)) {
-            callback(collection);
-        }
-    });
-}
-
-function fetchFromDb(collectionName, query, fields, httpResp) {
-    if (fields == null) {
-        fields = {};
-    }
-
-    doWithCollection(collectionName, httpResp, function (collection) {
-        collection.find(query, fields, function (err, cursor) {
-            if (isOk(err, httpResp)) {
-                cursor.toArray(function(err, docs) {
-                    if (isOk(err, httpResp)) {
-                        httpResp.send(docs);
-                    }
-                });
-            }
-        });
-    });
-}
-
-// Get game resource
-function getResource(type, id, httpResp) {
-    var dbId = convertId(id);
-    if ((id != null) && (dbId == null)) {
-        httpResp.send(400);
-        return;
-    }
-
-    doWithCollection(type, httpResp, function (collection) {
-        var query = id == null ? {} : {_id:dbId};
-        collection.find(query, function (err, cursor) {
-            if (isOk(err, httpResp)) {
-                cursor.toArray(function (err, items) {
-                    if (isOk(err, httpResp)) {
-                        httpResp.send(id != null ? items[0] : items);
-                    }
-                });
-            }
-        });
-    });
-}
-
-function newResource(type, resource, httpResp) {
-    doWithCollection(type, httpResp, function (collection) {
-        collection.insert(resource, function (err, doc) {
-            if (isOk(err, httpResp)) {
-                httpResp.send(doc[0]);
-            }
-        });
-    });
-}
-
-function putResource(type, id, resource, httpResp) {
-    var dbId = convertId(id);
-    if (dbId == null) {
-        httpResp.send(400);
-        return;
-    }
-
-    delete resource['_id'];
-
-    doWithCollection(type, httpResp, function (collection) {
-        collection.update({_id:dbId}, resource, null, function (err, doc) {
-            if (isOk(err, httpResp)) {
-                httpResp.send(204);
-            }
-        });
-    });
-}
-
-
-function delResource(type, id, httpResp) {
-    var dbId = convertId(id);
-    if (dbId == null) {
-        httpResp.send(400);
-        return;
-    }
-
-    doWithCollection(type, httpResp, function (collection) {
-        collection.remove({_id:dbId}, function (err, o) {
-            if (isOk(err, httpResp)) {
-                httpResp.send(202);
-            }
-        });
-    });
-}
-
-expressApp.get('/admin/items', function (req, res) {
-    getResource('items', null, res);
+expressApp.get('/admin/:resource_type/:id?', function(req, res) {
+    console.log(req.params);
+    var resource_id = _.isUndefined(req.params.id) ? null : req.params.id;
+    db_utils.getResource(req.params.resource_type, resource_id , res);
 });
 
-expressApp.get('/admin/items/:id', function (req, res) {
-    getResource('items', req.params.id, res);
+expressApp.get(/\/admin\/(\w+)\/(\w+)(\/[\/\d\w]+)/, function(req, res) {
+    var result = req.params[2].split('/');
+
+
+    res.send(req.params[2] + " => "  +result);
+
 });
 
 expressApp.post('/admin/items', function (req, res) {
     if (req.is('application/json')) {
-        newResource('items', req.body, res);
+        db_utils.newResource('items', req.body, res);
     } else {
         res.send(400);
     }
@@ -316,23 +212,14 @@ expressApp.post('/admin/items', function (req, res) {
 
 expressApp.put('/admin/items/:id', function (req, res) {
     if (req.is('application/json')) {
-        putResource('items', req.params.id, req.body, res);
+        db_utils.putResource('items', req.params.id, req.body, res);
     } else {
         res.send(400);
     }
 });
 
 expressApp.delete('/admin/items/:id', function (req, res) {
-    delResource('items', req.params.id, res);
-});
-
-
-expressApp.get('/admin/images', function(req, res) {
-    getResource('images', null, res);
-});
-
-expressApp.get('/admin/images/:id', function(req, res) {
-    getResource('images', req.params.id, res);
+    db_utils.delResource('items', req.params.id, res);
 });
 
 expressApp.post('/admin/items/images/', function (req, res) {
@@ -365,18 +252,9 @@ expressApp.post('/admin/items/images/', function (req, res) {
     }
 });
 
-
-expressApp.get('/admin/shops/', function (req, res) {
-    getResource('shops', null, res);
-});
-
-expressApp.get('/admin/shops/:id', function (req, res) {
-    getResource('shops', req.params.id, res);
-});
-
 expressApp.post('/admin/shops', function (req, res) {
     if (req.is('application/json')) {
-        newResource('shops', req.body, res);
+        db_utils.newResource('shops', req.body, res);
     } else {
         res.send(400);
     }
@@ -384,7 +262,7 @@ expressApp.post('/admin/shops', function (req, res) {
 
 expressApp.put('/admin/shops/:id', function (req, res) {
     if (req.is('application/json')) {
-        putResource('shops', req.params.id, req.body, res);
+        db_utils.putResource('shops', req.params.id, req.body, res);
     } else {
         res.send(400);
     }
@@ -401,7 +279,7 @@ expressApp.get('/admin/shops/:shop_id/items', function (req, res) {
     }
 
     var query = {shop_id:req.params.shop_id};
-    fetchFromDb('shop_items', query, null, res);
+    db_utils.fetchFromDb('shop_items', query, null, res);
 });
 
 expressApp.get('/admin/shops/:shop_id/items/:id', function (req, res) {
@@ -410,7 +288,7 @@ expressApp.get('/admin/shops/:shop_id/items/:id', function (req, res) {
         return;
     }
 
-    getResource('shop_items', req.params.id, res);
+    db_utils.getResource('shop_items', req.params.id, res);
 });
 
 
@@ -423,7 +301,7 @@ expressApp.post('/admin/shops/:shop_id/items', function (req, res) {
     if (req.is('application/json')) {
         var resource = req.body;
         resource['shop_id'] = req.params.shop_id;
-        newResource('shop_items', resource, res);
+        db_utils.newResource('shop_items', resource, res);
     } else {
         res.send(400);
     }
@@ -431,13 +309,19 @@ expressApp.post('/admin/shops/:shop_id/items', function (req, res) {
 
 expressApp.put('/admin/shops/:shop_id/items/:id', function (req, res) {
     if (req.is('application/json')) {
-        putResource('shop_items', req.params.id, req.body, res);
+        db_utils.putResource('shop_items', req.params.id, req.body, res);
     } else {
         res.send(400);
     }
 });
 
-expressApp.delete('/admin/shops/:shop_id/items/:id', function(req, res) {
+
+
+expressApp.delete('/admin/shops/:shop_id/items/:id', function (req, res) {
     console.log("requesting item " + req.params.id + " from shop " + req.params.shop_id);
-    delResource('shop_items', req.params.id, res);
+    db_utils.delResource('shop_items', req.params.id, res);
 });
+
+
+
+

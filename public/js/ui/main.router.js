@@ -8,7 +8,19 @@ var MainRouter = Backbone.Router.extend({
 
         UniGame.user.fetch({
             success:function (model, reposnse) {
-                deferred.resolve();
+                UniGame.character = new CharacterModel({_id: "__current"});
+                UniGame.character.fetch({
+                    success: function(model, response) {
+                        deferred.resolve();
+                    },
+
+                    error: function(model, response) {
+                        debug("Error while fetching character");
+                        redirectIfUnathorized(response);
+                        deferred.cancel();
+                    }
+                })
+
             },
 
             error:function (model, response) {
@@ -51,24 +63,12 @@ var MainRouter = Backbone.Router.extend({
         $.when(this.updateModels()).done(
             function () {
 
-                var userLocation = UniGame.user.get("location");
-                debug("userLocation: " + userLocation);
-                UniGame.location = new LocationModel({name:userLocation});
+                var characterLocation = UniGame.character.get("location");
+                debug("character location: " + characterLocation);
+                UniGame.location = new LocationModel({name:characterLocation});
                 UniGame.location.fetch({
                     success:function (model, reponse) {
                         UniGame.location_view = new LocationView({model:model});
-
-                        UniGame.app.mainRegion.bind("view:show", function () {
-                            UniGame.app.addRegions({ character:"#character_stats", chat:"#chat"});
-
-                            UniGame.character_view = new CharacterBriefInfoView();
-                            UniGame.app.character.show(UniGame.character_view);
-
-                            UniGame.chat_view = new ChatView();
-                            UniGame.chat_view.render();
-                            UniGame.app.chat.show(UniGame.chat_view);
-                        });
-
                         UniGame.app.mainRegion.show(UniGame.location_view);
                     },
 
@@ -83,7 +83,7 @@ var MainRouter = Backbone.Router.extend({
         if (_.isEmpty(id))
             return;
         debug("Goto location: " + id);
-        UniGame.user.save({location:id}, {
+        UniGame.character.save({location:id}, {
             success:function (model, response) {
                 UniGame.router.navigate("loc", {trigger:true});
             },

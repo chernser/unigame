@@ -10,6 +10,7 @@ require(
         'order!ui/user.model',
         'order!ui/location.model',
         'order!ui/shop.model',
+        'order!ui/character.model',
         'order!ui/common.view',
         'order!ui/index.view',
         'order!ui/registration.view',

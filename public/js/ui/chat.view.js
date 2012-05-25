@@ -6,6 +6,11 @@ var ChatView = Backbone.View.extend(_.extend(CommonView,
         getRenderContext: function() {
 
             return {messages: ["This is test message"], room: [{name: "Mikola"}]};
+        },
+
+
+        onShow: function() {
+
         }
 
     }

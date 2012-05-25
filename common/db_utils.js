@@ -1,5 +1,5 @@
 var mongoDb = require('mongodb');
-
+var engineApi = require('./api.js');
 
 module.exports = function (db) {
     this.db = db;
@@ -7,6 +7,18 @@ module.exports = function (db) {
     this.prototype = dbUtils;
     return this;
 };
+
+function collectionNameToDefId(collectionName) {
+    var collectionDefMapping = {
+        'items':'Item',
+        'users':'User',
+        'characters':'Character',
+        'shop_items':'ShopItem',
+        'character_stats':'Character/Stats'
+    };
+
+    return collectionDefMapping[collectionName];
+}
 
 
 var dbUtils = module.exports.prototype = {
@@ -66,7 +78,6 @@ var dbUtils = module.exports.prototype = {
                 if (dbUtils.isOk(err, httpResp)) {
                     cursor.toArray(function (err, items) {
                         if (dbUtils.isOk(err, httpResp)) {
-                            console.log('isOK');
                             if (typeof callback != 'undefined' && callback != null) {
                                 callback(items);
                             } else {
@@ -80,6 +91,9 @@ var dbUtils = module.exports.prototype = {
     },
 
     newResource:function (type, resource, httpResp) {
+        var defName = collectionNameToDefId(type);
+        resource = engineApi.createResource(defName, resource);
+
         this.doWithCollection(type, httpResp, function (collection) {
             collection.insert(resource, function (err, doc) {
                 if (dbUtils.isOk(err, httpResp)) {

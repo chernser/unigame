@@ -58,7 +58,7 @@ var MainRouter = Backbone.Router.extend({
 
     showGameDbModel : function() {
         debug("SHowing metamodel");
-        var models = ['Item', 'Shop', 'ShopItem', 'User', 'Character'];
+        var models = ['Item', 'Shop', 'ShopItem', 'User', 'Character', 'Character/Stats'];
         var mgmtView = new GameDbModeView({models: models});
         this.initDashboard(mgmtView);
     },

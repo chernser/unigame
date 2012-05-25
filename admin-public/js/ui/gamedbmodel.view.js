@@ -83,6 +83,7 @@ var GameDbModeView = Backbone.View.extend(_.extend(CommonView, {
                         type:model.attributes[attrKey].type,
                         consts:model.attributes[attrKey].consts,
                         url:model.attributes[attrKey].url,
+                        res_id: model.attributes[attrKey].res_id,
                         mandatory:model.attributes[attrKey].mandatory
                     };
 
@@ -156,6 +157,9 @@ var GameDbModeView = Backbone.View.extend(_.extend(CommonView, {
                 } else if (fieldType == 'ref' || fieldType == 'multiref') {
                     $(args).find("label").text("Base URL");
                     $(args).find("[name=args]").val(fieldDef.url);
+                } else if (fieldType == 'sub_resource') {
+                    $(args).find("label").text("Sub Resource Def. Name");
+                    $(args).find("[name=args]").val(fieldDef.res_id);
                 } else {
                     $(args).hide();
                 }
@@ -192,6 +196,9 @@ var GameDbModeView = Backbone.View.extend(_.extend(CommonView, {
                     }
                     if (fieldType == 'ref' || fieldType == 'multiref') {
                         fieldDef.url = args;
+                    }
+                    if (fieldType == 'sub_resource') {
+                        fieldDef.res_id = args;
                     }
 
                     model.attributes[fieldName] = fieldDef;

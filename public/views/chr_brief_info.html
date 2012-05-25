@@ -2,10 +2,9 @@
 <div class="span4">
     <h5 class="centered"><b id="health">[....-===]</b> {{name}} <b id="manna">[========]</b></h5>
     <ul class="list-of-values">
-        <li><small>strength:</small>12</li>
-        <li><small>inteligance:</small>5</li>
-        <li><small>agility:</small>12</li>
-        <li><small>dexterity:</small>12</li>
+        {{#stats}}
+            <li><small>{{name}}</small>: {{value}}</li>
+        {{/stats}}
     </ul>
     <div class="btn-group">
         <button class="btn btn-small">inventory</button>

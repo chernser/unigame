@@ -61,6 +61,7 @@ var ResourceFormView = Backbone.View.extend(_.extend(CommonView,
                 field['consts'] = attribute.consts;
                 field['url'] = attribute.url;
                 field['order'] = attrKeyOrder == -1 ? 65535 : attrKeyOrder;
+                field['res_id'] = attribute.res_id;
 
                 if (this.resource != null) {
                     field['value'] = this.resource.get(attrKey);
