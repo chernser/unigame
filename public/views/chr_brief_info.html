@@ -3,11 +3,21 @@
     <h5 class="centered"><b id="health">[....-===]</b> {{name}} <b id="manna">[========]</b></h5>
     <ul class="list-of-values">
         {{#stats}}
-            <li><small>{{name}}</small>: {{value}}</li>
+            <li><small>{{name}}</small>: {{value}}
+                <div stat={{name}} class="stat-points-reset"></div>
+                <div selectedIndex="0" stat="{{name}}" class="stat-points">
+                </div>
+            </li>
         {{/stats}}
+        {{#if hasFreePoints}}
+        <li>
+            <p>Free points: <b id="free_stat_points">{{free_points}}</b>
+            <button id="saveStatSpreadBtn" class="btn btn-mini">Save</button></p>
+        </li>
+        {{/if}}
     </ul>
     <div class="btn-group">
-        <button class="btn btn-small">inventory</button>
+        <button id="showInventoryBtn" class="btn btn-small">inventory</button>
         <button class="btn btn-small">skills</button>
         <button class="btn btn-small">quests</button>
     </div>

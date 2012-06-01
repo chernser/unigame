@@ -12,7 +12,7 @@
 
 .list-of-values { 
     display: inline-block;
-
+    list-style: none;
 }
 
 .list-of-values li {
@@ -58,4 +58,52 @@ input[type="button"].small-button  {
 #chatMessage {
     display: inline-block;
     width: 89%;
+}
+
+div.stat-points {
+    display: inline;
+}
+
+.stat-points div {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background: url('/images/add_point1.png');
+}
+
+div.stat-points-reset {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background: url('/images/reset_points.png');
+}
+
+.stat-points div.stat-points-seleted-point {
+    background: url('/images/add_point2.png');
+}
+
+div.stat-points-point {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background: url('/images/stat_point.png');
+}
+
+
+#bag p {
+    padding: 0;
+    margin: 0;
+}
+
+div.bag_cell {
+    display: inline-block;
+    height: 62px;
+    width: 62px;
+    border: solid 1px black;
 }

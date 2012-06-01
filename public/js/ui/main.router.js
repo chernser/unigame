@@ -47,7 +47,10 @@ var MainRouter = Backbone.Router.extend({
         'loc/tavern/:id':'gotoTavern',
 
         // Registration routes
-        'registration' : 'showRegistration'
+        'registration' : 'showRegistration',
+
+        // Character routes
+        'character/inventory/' : 'gotoCharacterInvetory'
     },
 
     showIndex:function () {
@@ -129,5 +132,10 @@ var MainRouter = Backbone.Router.extend({
 
         var regView = new RegistrationView();
         UniGame.app.mainRegion.show(regView);
+    },
+
+    gotoCharacterInvetory: function() {
+        var inventoryView = new InventoryView();
+        UniGame.app.mainRegion.show(inventoryView);
     }
 });
