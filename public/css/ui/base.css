@@ -96,14 +96,33 @@ div.stat-points-point {
 }
 
 
-#bag p {
-    padding: 0;
-    margin: 0;
+.slot-list {
+    list-style: none;
 }
 
-div.bag_cell {
-    display: inline-block;
+.slot-list li {
+    border: solid 1px black;
     height: 62px;
     width: 62px;
-    border: solid 1px black;
+}
+
+#bag {
+    margin-bottom: 30px;
+    padding-left: 3em;
+}
+
+.positive-bonus {
+    color: green;
+}
+
+.negative-bonus {
+    color: red;
+}
+
+.missing-requirement {
+    color: red;
+}
+
+img.item-image {
+   margin: 5px;
 }

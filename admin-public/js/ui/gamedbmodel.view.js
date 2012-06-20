@@ -84,7 +84,8 @@ var GameDbModeView = Backbone.View.extend(_.extend(CommonView, {
                         consts:model.attributes[attrKey].consts,
                         url:model.attributes[attrKey].url,
                         res_id: model.attributes[attrKey].res_id,
-                        mandatory:model.attributes[attrKey].mandatory
+                        mandatory:model.attributes[attrKey].mandatory,
+                        rel: model.attributes[attrKey].rel
                     };
 
                     fieldDef[fieldDef.type] = true;
@@ -92,8 +93,14 @@ var GameDbModeView = Backbone.View.extend(_.extend(CommonView, {
                     GameDbModeView.prototype.addField(fieldDef, that.fieldTemplate, targetDiv);
                 }
 
-                that.fieldTypeChanged();
+                $(".db-model-field").find(".field-type-select").show(function() {
+                    var field = that.selectedModel.model.get($(this).attr("field"));
+                    if (!_.isUndefined(field)) {
+                        $(this).val(field.type);
+                    }
+                });
 
+                that.fieldTypeChanged();
             });
         },
 
@@ -138,10 +145,9 @@ var GameDbModeView = Backbone.View.extend(_.extend(CommonView, {
             var that = this;
 
             $(fields).each(function(index, field) {
-                var fieldName = $(field).find("[name=fldName]").val();
                 var fieldType = $(field).find(".field-type-select").val();
+                var fieldName = $(field).find("[name=fldName]").val();
                 if (_.isUndefined(fieldType)) { return; }
-
 
                 var fieldDef = that.selectedModel.model.get(fieldName);
                 if (_.isUndefined(fieldDef)) { fieldDef = {}; }
@@ -174,17 +180,19 @@ var GameDbModeView = Backbone.View.extend(_.extend(CommonView, {
             var model = this.selectedModel.model;
 
             $(fields).each(function(index, field) {
-                var fieldName = $(field).find("[name=fldName]").val();
                 var fieldType = $(field).find(".field-type-select").val();
+                var fieldName = $(field).find("[name=fldName]").val();
                 var args = $(field).find("[args] > [name=args]").val();
+                var rel = $(field).find("[name=fldRel]").val();
 
-                debug(fieldName + ":" + fieldType + " (" + args + ")");
+                debug(fieldName + ":" + fieldType +": " + rel  + " (" + args + ")");
 
                 var fieldDef = model.get(fieldName);
                 if (_.isUndefined(fieldDef)) {
 
                     fieldDef = {
-                        type: fieldType
+                        type: fieldType,
+                        rel: rel
                     };
 
 

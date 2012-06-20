@@ -175,6 +175,7 @@ var initialDbModels = [
 
         name:{
             type:"string",
+            rel: "name",
             mandatory:true
         },
 
@@ -191,6 +192,7 @@ var initialDbModels = [
 
         name:{
             type:"string",
+            rel: "name",
             mandatory:true
         },
 
@@ -210,12 +212,39 @@ var initialDbModels = [
         image:{
             type:"image",
             url:"/images/items",
-            mandatory:true
+            mandatory:true,
+            rel: "image_ref"
         },
 
         durability:{
             type:"integer",
-            mandatory:true
+            mandatory:true,
+            rel: "item_attr"
+        },
+
+        damage: {
+            type: "integer",
+            rel: "item_attr"
+        },
+
+        defense: {
+            type: "integer",
+            rel: "item_attr"
+        },
+
+        strength_bonus: {
+            type: "integer",
+            rel: "pos_item_attr"
+        },
+
+        wisdom_cost: {
+            type: "integer",
+            rel: "neg_item_attr"
+        },
+
+        stamina_req: {
+            type: "integer",
+            rel: "item_req"
         }
     },
 
@@ -224,7 +253,8 @@ var initialDbModels = [
         _id:'Shop',
         name:{
             type:"string",
-            mandatory:true
+            mandatory:true,
+            rel: "name"
         },
 
         owners:{
@@ -244,7 +274,8 @@ var initialDbModels = [
         item_id:{
             type:"ref",
             url:"/items",
-            mandatory:true
+            mandatory:true,
+            rel: "resource_ref"
         },
 
         category:{
@@ -297,13 +328,15 @@ var initialDbModels = [
 
         name:{
             type:"string",
-            mandatory:true
+            mandatory:true,
+            rel: "name"
         },
 
         avatar_image:{
             type:"image",
             url:"/images/avatars/",
-            mandatory:true
+            mandatory:true,
+            rel: "image_ref"
         },
 
         user_id:{
@@ -336,48 +369,45 @@ var initialDbModels = [
             init:2
         },
 
-        stats:{
-            type: "sub_resource",
-            mandatory: true,
-            res_id: 'Character/Stats'
-        }
-    },
-
-    /*  Character/Stats */
-    {
-        _id: 'Character/Stats',
-
+        /* Stats */
         strength:{
+            rel: "character_param",
             type:"integer",
             init:3
         },
 
         dexterity:{
+            rel: "character_param",
             type:"integer",
             init:3
         },
 
         agility:{
+            rel: "character_param",
             type:"integer",
             init:3
         },
 
         wisdom:{
+            rel: "character_param",
             type:"integer",
             init:3
         },
 
         stamina:{
+            rel: "character_param",
             type:"integer",
             init:3
         },
 
         spirit:{
+            rel: "character_param",
             type:"integer",
             init:3
         },
 
         luck:{
+            rel: "character_param",
             type:"integer",
             init:3
         }

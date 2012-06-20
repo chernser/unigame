@@ -1,45 +1,58 @@
 <div class="row">
+    <div class="span12">
     <h2>Inventory</h2>
 
     <div class="row">
         <div class="span7">
-            <table border="1">
-                <tr>
-                    <td>Left Sholder</td>
-                    <td><img  src="/images/items/76782533b4e66c3c150e2e3130282843.png"></td>
-                    <td><img  src="/images/items/76782533b4e66c3c150e2e3130282843.png"></td>
-                </tr>
-                <tr>
-                    <td><img  src="/images/items/76782533b4e66c3c150e2e3130282843.png"></td>
-                    <td rowspan="2"><img  src="/images/characters/miniF2.png"></td>
-                    <td><img  src="/images/items/76782533b4e66c3c150e2e3130282843.png"></td>
-                </tr>
-                <tr>
-                    <td><img  src="/images/items/76782533b4e66c3c150e2e3130282843.png"></td>
-
-                    <td><img  src="/images/items/76782533b4e66c3c150e2e3130282843.png"></td>
-                </tr>
-                <tr>
-                    <td><img  src="/images/items/76782533b4e66c3c150e2e3130282843.png"></td>
-                    <td><img  src="/images/items/76782533b4e66c3c150e2e3130282843.png"></td>
-                    <td><img  src="/images/items/76782533b4e66c3c150e2e3130282843.png"></td>
-                </tr>
-
-
-            </table>
+            <div class="row">
+                <div class="span1">
+                    <ul class="slot-list">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <div class="span2">
+                    <img id="avatar_image" src="/images/characters/miniF2.png" alt="avatar">
+                </div>
+                <div class="span1">
+                    <ul class="slot-list">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+            </div>
             &nbsp;
         </div>
         <div class="span5">
             <h3>Item Info: Hamer of Gods</h3>
-            <img  src="/images/items/76782533b4e66c3c150e2e3130282843.png" style="border: solid 1px black;"  alt="">
+            <img src="/images/items/76782533b4e66c3c150e2e3130282843.png" style="border: solid 1px black;" alt="">
         </div>
     </div>
-    <hr>
     <div class="row">
-        <div id="bag" class="centered offset1 span10">
+        <ul id="inv_categories" class="nav nav-tabs">
+            <li class="active"><a href="#weapons" data-toggle="tab">Weapons</a></li>
+            <li><a href="#armor" data-toggle="tab">Armor</a></li>
+            <li><a href="#food" data-toggle="tab">Food</a></li>
+            <li><a href="#artifacts" data-toggle="tab">Artifacts</a></li>
+            <li><a href="#misc" data-toggle="tab">Misc</a></li>
+        </ul>
 
+        <div id="bag" class="tab-content">
+            <div class="tab-pane active" id="weapons">
+            </div>
+            <div class="tab-pane" id="armor">
+            </div>
+            <div class="tab-pane" id="food">
+            </div>
+            <div class="tab-pane" id="artifacts">
+            </div>
+            <div class="tab-pane" id="misc">&nbsp;
+            </div>
         </div>
-
     </div>
-
+    </div>
 </div>

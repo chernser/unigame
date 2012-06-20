@@ -1,0 +1,86 @@
+<div class="row">
+    <div class="span1">
+        <img class="item-image" src="{{image}}">
+
+        {{#if buy}}
+        <button class="btn btn-mini">Buy</button>
+        {{/if}}
+
+        {{#if sell}}
+        <button class="btn btn-mini">Sell</button>
+        {{/if}}
+
+        {{#if wearable}}
+        <button class="btn btn-mini">Put on</button>
+        {{/if}}
+
+        {{#if usable}}
+        <button class="btn btn-mini">Use</button>
+        {{/if}}
+
+        {{#if drinkable}}
+        <button class="btn btn-mini">Drink</button>
+        {{/if}}
+
+        {{#if throwable}}
+        <button class="btn btn-mini btn-danger">Throw</button>
+        {{/if}}
+    </div>
+    <div class="span6">
+        <div class="row">
+            <div class="span6">
+                {{#if cost}}
+                <h3>{{title}} (costs: {{cost}})</h3>
+                {{else}}
+                <h3>{{title}}</h3>
+                {{/if}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="span2">
+                <b>Characteristics:</b>
+                <ul>
+                    {{#attributes}}
+                    {{#if range}}
+                    <li>{{name}}: {{start}} - {{end}}</li>
+                    {{/if}}
+
+                    {{#if common}}
+                    <li>{{name}}: {{value}}</li>
+                    {{/if}}
+
+                    {{#if pos_bonus}}
+                    <li class="positive-bonus">{{name}}: {{value}}</li>
+                    {{/if}}
+
+                    {{#if neg_bonus}}
+                    <li class="negative-bonus">{{name}}: {{value}}</li>
+                    {{/if}}
+                    {{/attributes}}
+                </ul>
+            </div>
+
+            {{#if requirements}}
+            <div class="span2">
+                <b>This item requires:</b>
+                <ul>
+                    {{#requirements}}
+                    {{#if missing}}
+                    <li class="missing-requirement">{{name}}: {{value}}</li>
+                    {{else}}
+                    <li>{{name}}: {{value}}</li>
+                    {{/if}}
+                    {{/requirements}}
+                </ul>
+            </div>
+            {{/if}}
+            <div class="span2">
+                <h3>&nbsp</h3>
+
+                <p>
+                    {{desc}}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

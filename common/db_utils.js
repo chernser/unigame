@@ -1,5 +1,6 @@
 var mongoDb = require('mongodb');
 var engineApi = require('./api.js');
+var _ = require('underscore');
 
 module.exports = function (db) {
     this.db = db;
@@ -47,7 +48,7 @@ var dbUtils = module.exports.prototype = {
         });
     },
 
-    fetchFromDb:function (collectionName, query, fields, httpResp) {
+    fetchFromDb:function (collectionName, query, fields, httpResp, callback) {
         if (fields == null) {
             fields = {};
         }
@@ -57,7 +58,11 @@ var dbUtils = module.exports.prototype = {
                 if (dbUtils.isOk(err, httpResp)) {
                     cursor.toArray(function (err, docs) {
                         if (dbUtils.isOk(err, httpResp)) {
-                            httpResp.send(docs);
+                            if (_.isFunction(callback)) {
+                                callback(docs);
+                            } else {
+                                httpResp.send(docs);
+                            }
                         }
                     });
                 }

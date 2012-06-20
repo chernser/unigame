@@ -430,7 +430,29 @@ expressApp.get('/game/shops/:id/items/(:category){0,1}', checkSession, function 
         query.category = category;
     }
     var fields = {category:1, item_id:1, cost:1, _id:1};
-    application.db_utils.fetchFromDb('shop_items', query, fields, res);
+
+
+    application.db_utils.fetchFromDb('items', {}, {}, res, function(items) {
+        var itemsMap = {};
+        for (var itemIndex in items) {
+            var item = items[itemIndex];
+            itemsMap[item._id] = item;
+        }
+
+        var thatResp = res;
+        function itemAggregatorFun(shopItems) {
+            for (var shopItemIndex in shopItems) {
+                var shopItem = shopItems[shopItemIndex];
+                shopItem.item = itemsMap[shopItem.item_id];
+            }
+
+            thatResp.send(shopItems);
+        }
+
+        application.db_utils.fetchFromDb('shop_items', query, fields, res, itemAggregatorFun);
+    });
+
+
 });
 
 

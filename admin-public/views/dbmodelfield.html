@@ -1,42 +1,52 @@
 <div class="row db-model-field">
-    <div class="span3">
-        <label>Field Name</label>
-        {{#if isNew}}
-        <input name="fldName" type="text" value="{{name}}">
-        {{else}}
-        <input disabled="disabled" name="fldName" type="text" value="{{name}}">
-        {{/if}}
-    </div>
-    <div class="span3">
-        <label>Type</label>
+    <div class="span12">
+        <div class="span3">
+            <label>Field Name</label>
+            {{#if isNew}}
+            <input name="fldName" type="text" value="{{name}}">
+            {{else}}
+            <input disabled="disabled" name="fldName" type="text" value="{{name}}">
+            {{/if}}
+        </div>
+        <div class="span2">
+            <label>Type</label>
+            {{#if mandatory}}
+            <input class="field-type-select input-small" disabled="disabled" type="text" value="{{type}}">
+            {{else}}
+            <select field="{{name}}" class="field-type-select input-small">
+                <option>string</option>
+                <option>integer</option>
+                <option>float</option>
+                <option>image</option>
+                <option>enum</option>
+                <option>ref</option>
+                <option>multiref</option>
+                <option>sub_resource</option>
+            </select>
+            {{/if}}
+        </div>
+
+        <div class="span2">
+            <label>Rel</label>
+            {{#if mandatory}}
+            <input name="fldRel" value="{{rel}}" type="text" class="input-small" disabled="disabled">
+            {{else}}
+            <input name="fldRel" value="{{rel}}" type="text" class="input-small">
+            {{/if}}
+        </div>
+
+        <div style="display: none;" args="args" class="span3">
+            <label></label>
+            <input name="args" type="text" >
+        </div>
+
         {{#if mandatory}}
-        <input class="field-type-select" disabled="disabled" name="fldName" type="text" value="{{type}}">
+
         {{else}}
-        <select class="field-type-select">
-            <option>string</option>
-            <option>integer</option>
-            <option>float</option>
-            <option>image</option>
-            <option>enum</option>
-            <option>ref</option>
-            <option>multiref</option>
-            <option>sub_resource</option>
-        </select>
+        <div class="span1">
+            <label>&nbsp;</label>
+            <button type="button" class="btn btn-danger">Remove</button>
+        </div>
         {{/if}}
     </div>
-
-    <div style="display: none;" args="args" class="span3">
-        <label></label>
-        <input name="args" type="text" class="span3">
-    </div>
-
-    {{#if mandatory}}
-
-    {{else}}
-    <div class="span1">
-        <label>&nbsp;</label>
-        <button type="button" class="btn btn-danger">Remove</button>
-    </div>
-    {{/if}}
-
 </div>

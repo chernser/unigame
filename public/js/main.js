@@ -30,6 +30,7 @@ require(
     'order!lib/backbone',
     'order!lib/backbone.marionette-0.6.2',
     'order!lib/pinkerton.agent',
+    'order!lib/bootstrap',
     'order!lib/json2',
     'order!templates',
     'order!ui/main'
