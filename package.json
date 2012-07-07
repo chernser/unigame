@@ -13,7 +13,9 @@
         "jade" : "0.20.x",
         "stylus" : "0.x.x",
         "mongodb" : "0.9.x",
-        "winston": "0.5.x"
+        "winston": "0.5.x",
+        "amqp": "0.1.x"
+
     },
     "devDependencies": {
         "vows": "0.6.x"

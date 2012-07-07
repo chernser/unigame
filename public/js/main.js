@@ -16,6 +16,7 @@ require(
     'order!lib/handlebars',
     'order!lib/backbone',
     'order!lib/backbone.marionette-0.6.2',
+    'order!lib/socket.io',
     'order!lib/pinkerton.agent',
     'order!lib/json2',
     'order!templates',

@@ -13,13 +13,13 @@ var express = require('express');
 var mongoDb = require('mongodb');
 
 
+
 // Application
 var application = new events.EventEmitter();
 
 application.state = {
     'db.ready' : false,
     //'log.ready': false,
-
     setBitReady: function (bit) {
         if (!_.isUndefined(bit)) {
             this[bit] = true;
@@ -197,4 +197,40 @@ var mockShop = {
 expressApp.get('/engine/shop/:id', function(req, res) {
 
     res.send(mockShop);
+});
+
+
+// Chat API
+var chatSrv = require('./chat_srv.js').create();
+
+
+expressApp.post('/chat/:room/', function(req, res) {
+    // Add new participant in room
+    var subscriber = req.body;
+
+    chatSrv.addSubscriber(subscriber.key, req.params.room,
+        function(event, args) {
+            if (event == 'subscribed') {
+                console.log("subscriber: ", subscriber, " subscribed");
+                res.send(202);
+            }
+
+            if (event == 'message') {
+                console.log("message: ", args);
+            }
+        });
+});
+
+expressApp.post('/chat/:room/message', function(req, res) {
+    var message = req.body;
+    chatSrv.sendMessage(message.from, req.params.room, message);
+    res.send(202);
+});
+
+
+expressApp.get('/chat/:room', function(req, res) {
+
+    var participants = chatSrv.getRoomParticipants(req.params.room);
+
+    res.json(participants);
 });

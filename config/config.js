@@ -9,11 +9,14 @@
 module.exports.isProduction = false;
 
 // General db configuration
-module.exports.db =
-{
+module.exports.db = {
     name:"unigame_01"
 }
 
+// General AMQP configuration
+module.exports.amqp = {
+    host: "localhost"
+}
 
 // Control panel specific configuration
 module.exports.admin = {
@@ -32,5 +35,9 @@ module.exports.game = {
     server:{
         domain:"localhost",
         port:7000
+    },
+
+    chat: {
+        socket_io_port: 7002
     }
 };

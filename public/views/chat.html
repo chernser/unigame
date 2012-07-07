@@ -1,17 +1,25 @@
-<div class="columns eleven four-lines">
-    {{#each messages}}
-        {{this}}
-    {{/each}}
+<div class="columns eleven four-lines" id="chat_messages">
 </div>
 <div class="columns four">
-    <ul>
-        {{#each room}}
-        <li>{{this.name}}</li>
-        {{/each}}
+    <ul id="chat_room_participants">
+            <li>Hlopez</li>
     </ul>
 </div>
 <div class="container">
     <div class="columns eleven">
+        <ul class="nav nav-tabs">
+            <li class="dropdown">
+                <a class="dropdown-toggle"
+                   data-toggle="dropdown"
+                   href="#">
+                    Dropdown
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <!-- links -->
+                </ul>
+            </li>
+        </ul>
         <input id="sendBtn" type="button" value="send">
         <input id="chatMessage" type="text">
     </div>
